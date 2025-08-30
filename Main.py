@@ -38,7 +38,7 @@ while True:
 
         #Finalizar ação
         case 3:
-            print("Tenha um otimo dia! :)")
+            print("finalizado!")
             break
         
     mostrarMenu()
