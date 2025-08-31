@@ -4,5 +4,14 @@ class Aluno:
         self.nome = nome
         self.idade = idade
         self.matricula = matricula
-
-        pass
+    
+    def __str__(self):
+        return f"Aluno: {self.nome}, {self.idade} anos"
+    
+    def to_dict(self):
+        return {
+            "nome": self.nome,
+            "idade": self.idade,
+            "matricula": self.matricula
+        }
+    
