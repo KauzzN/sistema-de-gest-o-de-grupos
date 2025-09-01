@@ -1,5 +1,9 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #Importando biblioteca de json
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -9,14 +13,18 @@ DBFile = "DataBase.json"
 
 class Alunos:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     #inicializador da classe
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     def __init__(self, ID_ALUNO, nome):
         self.ID_ALUNO = ID_ALUNO
         self.nome = nome
         self.turma = None
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         self.status = None
 
@@ -30,17 +38,23 @@ class Turmas:
 
     #inicializador da classe
 =======
+=======
+>>>>>>> Stashed changes
 
     def ToDict(self):
         return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma}
     
 class Turmas:
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     def __init__(self, ID_TURMA, nome):
         self.ID_TURMA = ID_TURMA
         self.nome = nome
         self.alunos = []
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
     #Adiciona o aluno a turma desejada
@@ -165,6 +179,8 @@ class Sistema:
 
             #identifica o aluno dentro da dataBase
 =======
+=======
+>>>>>>> Stashed changes
     def AddAluno(self, aluno):
         # Remove da turma antiga
         if aluno.turma:
@@ -197,6 +213,9 @@ class Sistema:
                 dados = json.load(f)
 
             # Reconstruir alunos
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             cls.alunos = {
                 int(id_a): Alunos(int(id_a), info["nome"])
@@ -205,6 +224,7 @@ class Sistema:
             for id_a, info in dados.get("alunos", {}).items():
                 cls.alunos[int(id_a)].turma = info["turma"]
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             #identifica a classe dentro da dataBase
             cls.turmas = {
@@ -240,6 +260,8 @@ class Sistema:
         return max(cls.turmas.keys()) + 1
         #Pega o maior Id do dicionario Turmas e soma +1
 =======
+=======
+>>>>>>> Stashed changes
             # Reconstruir turmas
             cls.turmas = {
                 cod: Turmas(cod, info["nome"])
@@ -276,4 +298,7 @@ matematica.AddAluno(maria)
 # Salvar no JSON
 Sistema.salvar()
 print("Dados salvos em DataBase.json!")
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
