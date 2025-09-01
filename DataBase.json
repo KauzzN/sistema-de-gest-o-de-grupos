@@ -1,3 +1,11 @@
 {
-    "teste@gmail.com": "testando"
+    "alunos": {},
+    "turmas": {
+        "1424": {
+            "nome": "kaynnan",
+            "status": "ativo",
+            "turma": "937"
+        }
+    },
+    "teste@gmail.com": "teste"
 }
