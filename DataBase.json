@@ -1,18 +1,4 @@
 {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    "alunos": {},
-    "turmas": {
-        "1424": {
-            "nome": "kaynnan",
-            "status": "ativo",
-            "turma": "937"
-        }
-    },
-    "teste@gmail.com": "teste"
-=======
-=======
->>>>>>> Stashed changes
     "alunos": {
         "1": {
             "id_aluno": 1,
@@ -40,8 +26,4 @@
             "alunos": []
         }
     }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
