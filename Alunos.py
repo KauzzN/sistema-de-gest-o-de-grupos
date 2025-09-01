@@ -1,15 +1,23 @@
+<<<<<<< Updated upstream
 #Importando biblioteca de json
+=======
+
+>>>>>>> Stashed changes
 import json
 
 DBFile = "DataBase.json"
 
 class Alunos:
+<<<<<<< Updated upstream
 
     #inicializador da classe
+=======
+>>>>>>> Stashed changes
     def __init__(self, ID_ALUNO, nome):
         self.ID_ALUNO = ID_ALUNO
         self.nome = nome
         self.turma = None
+<<<<<<< Updated upstream
         self.status = None
 
 
@@ -21,11 +29,19 @@ class Alunos:
 class Turmas:
 
     #inicializador da classe
+=======
+
+    def ToDict(self):
+        return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma}
+    
+class Turmas:
+>>>>>>> Stashed changes
     def __init__(self, ID_TURMA, nome):
         self.ID_TURMA = ID_TURMA
         self.nome = nome
         self.alunos = []
 
+<<<<<<< Updated upstream
 
     #Adiciona o aluno a turma desejada
     def addAluno(self, aluno):
@@ -148,6 +164,40 @@ class Sistema:
                 dados = json.load(file)
 
             #identifica o aluno dentro da dataBase
+=======
+    def AddAluno(self, aluno):
+        # Remove da turma antiga
+        if aluno.turma:
+            Sistema.turmas[aluno.turma].alunos.remove(aluno.ID_ALUNO)
+
+        # Adiciona na nova turma
+        aluno.turma = self.ID_TURMA
+        self.alunos.append(aluno.ID_ALUNO)
+
+    def ToDict(self):
+        return {"codigo": self.ID_TURMA, "nome": self.nome, "alunos": self.alunos}
+    
+class Sistema:
+    alunos = {}
+    turmas = {}
+
+    @classmethod
+    def salvar(cls, arquivo=DBFile):
+        dados = {
+            "alunos": {id_a: aluno.ToDict() for id_a, aluno in cls.alunos.items()},
+            "turmas": {cod: turma.ToDict() for cod, turma in cls.turmas.items()}
+        }
+        with open(arquivo, "w", encoding="utf-8") as f:
+            json.dump(dados, f, indent=4, ensure_ascii=False)
+
+    @classmethod
+    def carregar(cls, arquivo=DBFile):
+        try:
+            with open(arquivo, "r", encoding="utf-8") as f:
+                dados = json.load(f)
+
+            # Reconstruir alunos
+>>>>>>> Stashed changes
             cls.alunos = {
                 int(id_a): Alunos(int(id_a), info["nome"])
                 for id_a, info in dados.get("alunos", {}).items()
@@ -155,6 +205,7 @@ class Sistema:
             for id_a, info in dados.get("alunos", {}).items():
                 cls.alunos[int(id_a)].turma = info["turma"]
 
+<<<<<<< Updated upstream
             #identifica a classe dentro da dataBase
             cls.turmas = {
                 int(id_t): Turmas(int(id_t), info["nome"])
@@ -188,3 +239,41 @@ class Sistema:
         
         return max(cls.turmas.keys()) + 1
         #Pega o maior Id do dicionario Turmas e soma +1
+=======
+            # Reconstruir turmas
+            cls.turmas = {
+                cod: Turmas(cod, info["nome"])
+                for cod, info in dados.get("turmas", {}).items()
+            }
+            for cod, info in dados.get("turmas", {}).items():
+                cls.turmas[cod].alunos = info["alunos"]
+
+        except FileNotFoundError:
+            cls.alunos, cls.turmas = {}, {}
+
+# ------------------- Teste -------------------
+Sistema.carregar()
+
+# Criar alunos
+joao = Alunos(1, "João")
+maria = Alunos(2, "Maria")
+Sistema.alunos[joao.ID_ALUNO] = joao
+Sistema.alunos[maria.ID_ALUNO] = maria
+
+# Criar turmas
+matematica = Turmas("A1", "Matemática")
+historia = Turmas("B1", "História")
+Sistema.turmas[matematica.ID_TURMA] = matematica
+Sistema.turmas[historia.ID_TURMA] = historia
+
+# Adicionar alunos
+matematica.AddAluno(joao)
+historia.AddAluno(maria)
+
+# Maria troca de turma
+matematica.AddAluno(maria)
+
+# Salvar no JSON
+Sistema.salvar()
+print("Dados salvos em DataBase.json!")
+>>>>>>> Stashed changes

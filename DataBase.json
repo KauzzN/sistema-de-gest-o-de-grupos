@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
     "alunos": {},
     "turmas": {
         "1424": {
@@ -8,4 +9,33 @@
         }
     },
     "teste@gmail.com": "teste"
+=======
+    "alunos": {
+        "1": {
+            "id_aluno": 1,
+            "nome": "João",
+            "turma": "A1"
+        },
+        "2": {
+            "id_aluno": 2,
+            "nome": "Maria",
+            "turma": "A1"
+        }
+    },
+    "turmas": {
+        "A1": {
+            "codigo": "A1",
+            "nome": "Matemática",
+            "alunos": [
+                1,
+                2
+            ]
+        },
+        "B1": {
+            "codigo": "B1",
+            "nome": "História",
+            "alunos": []
+        }
+    }
+>>>>>>> Stashed changes
 }
