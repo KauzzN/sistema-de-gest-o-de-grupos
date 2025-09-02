@@ -1,9 +1,9 @@
  
 #Dependencias
 from LoginUtils import Login
-from Alunos import Alunos
-from Alunos import Turmas
-from Alunos import Sistema
+from alunos import Alunos
+from alunos import Turmas
+from alunos import Sistema
 
 
 #login System
