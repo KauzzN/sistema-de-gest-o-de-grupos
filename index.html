@@ -1,96 +1,161 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Site Estilo Cartoon</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  body {
-    background: linear-gradient(to bottom, #ffffff, #cccccc);
-    min-height: 100vh;
-    color: #222;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background: transparent;
-  }
-
-  .logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: #222;
-  }
-
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-  }
-
-  nav ul li a {
-    text-decoration: none;
-    color: #222;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  nav ul li a:hover {
-    color: #555;
-  }
-
-  .login-btn {
-    padding: 8px 20px;
-    border: 2px solid #222;
-    border-radius: 5px;
-    background: transparent;
-    color: #222;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .login-btn:hover {
-    background-color: #222;
-    color: white;
-  }
-
-  @media (max-width: 600px) {
-    header {
-      flex-direction: column;
-      gap: 15px;
-      padding: 20px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
     }
-    nav ul {
-      flex-direction: column;
-      gap: 15px;
+
+    body {
+      height: 100vh;
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: center;
       align-items: center;
     }
-  }
-</style>
+
+    .container {
+      width: 850px;
+      background-color: #2a2a2a;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+    }
+
+    .login-box {
+      display: flex;
+      width: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .signin, .signup {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+    }
+
+    .signin {
+      background-color: #2a2a2a;
+    }
+
+    .signup {
+      background-color: #1a1a1a;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    input {
+      margin: 8px 0;
+      padding: 12px;
+      border: none;
+      background-color: #3a3a3a;
+      border-radius: 5px;
+      color: white;
+      font-size: 1em;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    a {
+      color: #aaa;
+      font-size: 0.9em;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      width: 60%;
+      max-width: 300px;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    .signin-btn {
+      background-color: #4a4a4a;
+      color: white;
+    }
+
+    .signin-btn:hover {
+      background-color: #5c5c5c;
+    }
+
+    .signup-btn {
+      background-color: #4a4a4a;
+      color: white;
+    }
+
+    .signup-btn:hover {
+      background-color: #5c5c5c;
+    }
+
+    /* Quando ativa a classe 'active', a login-box desloca para mostrar a outra tela */
+    .container.active .login-box {
+      transform: translateX(-50%);
+    }
+  </style>
 </head>
 <body>
+  <div class="container" id="container">
+    <div class="login-box">
+      <div class="signin">
+        <h2>Login</h2>
+        <p>Entre usando seu e-mail e senha</p>
+        <input type="text" placeholder="E-mail" />
+        <input type="password" placeholder="Senha" />
+        <a href="#">Esqueceu a sua senha?</a>
+        <button class="signin-btn">Login</button>
+      </div>
 
-<header>
-  <div class="logo">Logo</div>
-  <nav>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><button class="login-btn">Login</button></li>
-    </ul>
-  </nav>
-</header>
+      <div class="signup">
+        <h2>Olá, Educador(a)!</h2>
+        <p>Cadastre-se para acessar todos os recursos de Gestão</p>
+        <button id="toggle-btn" class="signup-btn">Cadastrar</button>
+      </div>
+    </div>
+  </div>
 
+  <script>
+    const container = document.getElementById('container');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    toggleBtn.addEventListener('click', () => {
+      container.classList.toggle('active');
+
+      // Trocar texto do botão conforme a tela exibida
+      if(container.classList.contains('active')) {
+        toggleBtn.textContent = 'Login';
+      } else {
+        toggleBtn.textContent = 'Cadastrar';
+      }
+    });
+  </script>
 </body>
 </html>
