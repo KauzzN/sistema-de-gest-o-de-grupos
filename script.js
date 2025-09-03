@@ -1,11 +1,19 @@
-const container = document.getElementById('container');
-const registerBtn = document.getElementById('register');
-const loginBtn = document.getElementById('login');
+const toggleBtn = document.getElementById('toggle-btn');
+const backBtn = document.getElementById('back-btn');
+const signupRight = document.querySelector('.signup-right');
+const signupText = document.getElementById('signup-text');
+const container = document.querySelector('.login-box');
 
-registerBtn.addEventListener('click', () => {
-  container.classList.add("active");
+toggleBtn.addEventListener('click', () => {
+  // Esconde a parte do login e mostra a parte do registro
+  container.classList.add('hide-signin');
+  signupRight.classList.add('visible');
+  signupText.textContent = 'Faça o Login para ter acesso a sua Gestão';
 });
 
-loginBtn.addEventListener('click', () => {
-  container.classList.remove("active");
+backBtn.addEventListener('click', () => {
+  // Volta para a tela inicial, mostrando login e ocultando o registro
+  container.classList.remove('hide-signin');
+  signupRight.classList.remove('visible');
+  signupText.textContent = 'Cadastre-se para acessar todos os recursos de Gestão';
 });
