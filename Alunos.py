@@ -15,7 +15,7 @@ class Alunos:
 
     #Transforma um aluno em dicionario
     def ToDict(self):
-        return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma}
+        return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma, "status": self.status}
 
 
 class Turmas:
@@ -56,8 +56,10 @@ class Sistema:
         #Juntando turma e alunos
         dados = {
             "alunos": {id_a: aluno.ToDict() for id_a, aluno in cls.alunos.items()},
-            "turmas": {id_t: turma.ToDict() for id_t, turma in cls.turmas.items()}
+            "turmas": {id_t: turma.ToDict() for id_t, turma in cls.turmas.items()},
+            "concluintes": list(cls.concluintes)
         }
+
         #abrindo o arquivo "DBFile" para rescrever adicionando as turmas
         with open(arquivo, "w", encoding = "utf-8") as file:
             json.dump(dados, file, indent = 4, ensure_ascii = False)
@@ -98,16 +100,16 @@ class Sistema:
                     
                         #nomea a turma caso o aluno possua uma
                         else:
-                            turma_nome = cls.turmas[aluno.turma].nome
+                            turma_nome = cls.aluno[aluno.turma].nome
                     
-                    #Lista todos os alunos e sua turma
-                    print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome} Turma: {turma_nome}")
-            
+                        #Lista todos os alunos e sua turma
+                        print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome}, Turma: {turma_nome}")
+                
             
             #Lista os usuarios por turma
             case 2:
                 #escolhe qual turma checar
-                turmaID = input("Digite o ID da turma ")
+                turmaID = int(input("Digite o ID da turma "))
                 
                 #Checa se a turma existe
                 if turmaID not in cls.turmas:
@@ -163,9 +165,12 @@ class Sistema:
             for id_t, info in dados.get("turmas", {}).items():
                 cls.turmas[int(id_t)].alunos = info["alunos"]
 
+            cls.concluintes = set(dados.get("concluintes", []))
+
+        
         #checagem para não dar erro caso o aluno e a turma não seja encontrado
         except FileNotFoundError:
-            cls.alunos, cls.turmas = {}, {}
+            cls.alunos, cls.turmas, cls.concluintes = {}, {}, set()
     
 
     #Gerando ID automatico do aluno
