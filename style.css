@@ -19,76 +19,46 @@ body {
   border-radius: 15px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   overflow: hidden;
-  position: relative;
   display: flex;
 }
 
 .login-box {
   width: 100%;
   display: flex;
-  transition: all 0.5s ease;
 }
 
-.signin, .signup {
+.signin, .welcome {
   flex: 1;
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: white;
-  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .signin {
   background-color: #2a2a2a;
+  border-right: 1px solid #444;
 }
 
-.signup {
+.welcome {
   background-color: #1a1a1a;
-  display: flex;
-  border-radius: 0 15px 15px 0;
-  padding: 60px 60px 60px 40px;
-  color: white;
-  gap: 40px;
-}
-
-.signup-left {
-  flex: 1;
+  align-items: center;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 70px;  /* Você pode ajustar esse valor (ex: 40px, 50px, etc.) */
 }
 
-.signup-left h2 {
-  margin-bottom: 20px;
+.welcome h2 {
   font-size: 2rem;
-}
-
-.signup-left p {
   margin-bottom: 20px;
-  word-wrap: break-word;
-  white-space: normal;
 }
 
-.signup-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;  /* Centraliza verticalmente */
-  align-items: center;      /* Centraliza horizontalmente */
-  border-left: 1px solid #444;
-  padding-left: 40px;
-  opacity: 0;
-  transform: translateX(50px);
-  pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  text-align: center;       /* Centraliza o texto */
-}
-
-.signup-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
+.welcome p {
+  margin-bottom: 30px;
+  max-width: 300px;
 }
 
 input {
@@ -99,6 +69,7 @@ input {
   border-radius: 5px;
   color: white;
   font-size: 1em;
+  width: 100%;
 }
 
 input::placeholder {
@@ -112,6 +83,10 @@ a {
   margin-bottom: 20px;
 }
 
+a:visited {
+  color: #aaa;
+}
+
 .signin-btn, .signup-btn {
   padding: 12px;
   border: none;
@@ -121,41 +96,17 @@ a {
   border-radius: 25px;
   cursor: pointer;
   transition: background 0.3s;
-  width: 60%;
+  width: 200px;
   max-width: 300px;
   text-align: center;
-  align-self: flex-start;
+  align-self: center;
   margin-top: 10px;
 }
 
-.signup-btn {
-  align-self: center;  /* Botão do lado direito centralizado */
-  width: 200px;        /* Largura fixa para o botão do lado direito */
+.signin-btn {
+  align-self: flex-start;
 }
 
 .signin-btn:hover, .signup-btn:hover {
   background-color: #5c5c5c;
-}
-
-.back-btn {
-  margin-top: 20px;
-  background-color: #666;
-}
-
-.back-btn:hover {
-  background-color: #555;
-}
-
-.login-box.hide-signin .signin {
-  opacity: 0;
-  transform: translateX(-50px);
-  pointer-events: none;
-}
-
-.login-box.hide-signin .signup-left p {
-  margin-bottom: 40px;
-}
-
-.login-box.hide-signin .signup-left #toggle-btn {
-  display: none;
 }
