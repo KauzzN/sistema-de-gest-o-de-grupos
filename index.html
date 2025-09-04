@@ -1,96 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Site Estilo Cartoon</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  body {
-    background: linear-gradient(to bottom, #ffffff, #cccccc);
-    min-height: 100vh;
-    color: #222;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background: transparent;
-  }
-
-  .logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: #222;
-  }
-
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-  }
-
-  nav ul li a {
-    text-decoration: none;
-    color: #222;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  nav ul li a:hover {
-    color: #555;
-  }
-
-  .login-btn {
-    padding: 8px 20px;
-    border: 2px solid #222;
-    border-radius: 5px;
-    background: transparent;
-    color: #222;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .login-btn:hover {
-    background-color: #222;
-    color: white;
-  }
-
-  @media (max-width: 600px) {
-    header {
-      flex-direction: column;
-      gap: 15px;
-      padding: 20px;
-    }
-    nav ul {
-      flex-direction: column;
-      gap: 15px;
-      align-items: center;
-    }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <div class="login-box">
 
-<header>
-  <div class="logo">Logo</div>
-  <nav>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><button class="login-btn">Login</button></li>
-    </ul>
-  </nav>
-</header>
+      <!-- Login -->
+      <div class="signin">
+        <h2>Login</h2>
+        <p>Entre usando seu e-mail e senha</p>
+        <input type="text" placeholder="E-mail" />
+        <input type="password" placeholder="Senha" />
+        <a href="#">Esqueceu a sua senha?</a>
+        <button class="signin-btn">Login</button>
+      </div>
 
+      <!-- Mensagem Lateral -->
+      <div class="welcome">
+        <h2>Olá, Educador(a)!</h2>
+        <p>Cadastre-se para acessar todos os recursos de Gestão</p>
+        <button class="signup-btn">Cadastrar</button>
+      </div>
+
+    </div>
+  </div>
 </body>
 </html>
