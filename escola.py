@@ -1,9 +1,16 @@
+from dataclasses import dataclass
 
-
+@dataclass
 class Escola:
-    def __init__(self, nome, cidade, bairro):
-        self.nome = nome
-        self.cidade = cidade
-        self.bairro = bairro
-        self.id = None
-        self.turmas = []
+    id_escola: int
+    nome_escola: str 
+    cidade: str 
+    bairro: str 
+
+    def toDict(self):
+        return {
+            "id_escola": self.id_escola,
+            "nome_escola": self.nome_escola, 
+            "cidade": self.cidade,
+            "bairro": self.bairro
+        } 
