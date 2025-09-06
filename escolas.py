@@ -6,6 +6,7 @@ class Escola:
     nome_escola: str 
     cidade: str 
     bairro: str 
+    turmas = []
 
     def toDict(self):
         return {

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 class Professor:
     id_professor: int
     nome_professor: str
+    turmas = []
     
     def todict(self):
         return {
