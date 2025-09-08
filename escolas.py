@@ -8,7 +8,7 @@ class Escola:
     bairro: str 
     turmas = []
 
-    def toDict(self):
+    def ToDict(self):
         return {
             "id_escola": self.id_escola,
             "nome_escola": self.nome_escola, 

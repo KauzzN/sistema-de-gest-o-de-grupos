@@ -13,7 +13,7 @@ class Gestor:
     turmas: List[Turmas] = field(default_factory=list)
     alunos:List[Alunos] = field(default_factory=list)
 
-    def todict(self):
+    def Tdict(self):
         return {
             "id_gestor": self.id_gestor,
             "nome_gestor": self.nome_gestor,

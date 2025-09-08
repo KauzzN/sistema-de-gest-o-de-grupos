@@ -6,7 +6,7 @@ class Professor:
     nome_professor: str
     turmas = []
     
-    def todict(self):
+    def Todict(self):
         return {
             "id_professor": self.id_professor,
             "nome_professor": self.nome_professor

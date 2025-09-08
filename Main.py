@@ -1,9 +1,9 @@
  
 #Dependencias
 from LoginUtils import Login
-from alunos import Alunos
-from alunos import Turmas
-from alunos import Sistema
+from alunos import Alunos, Turmas
+from Sistema import Sistema
+from Utils import Utils
 
 
 #login System
@@ -21,12 +21,14 @@ def mostrarMenuCad():
     print("""
     Menu cadastro:
         1. Cadastrar aluno
-        2. Criar turma  
-        3. Adicionar/Transferir aluno
-        4. Listar alunos/turmas
-        5. Adicionar concluinte unico
-        6. Adicionar turma concluinte
-        7. Finalizar
+        2. Cadastrar escola
+        3. Cadastrar professor
+        4. Cadastrar Gestor
+        5. Criar turma  
+        6. Adicionar/Transferir aluno
+        7. Listar alunos/turmas
+        8. Adicionar turma concluinte
+        9. Finalizar
 """)
     
 def mostrarMenuList():
@@ -57,29 +59,11 @@ def executarCadSystem():
 
             #cadastrar Aluno
             case 1:
-                #pegando as informações do aluno
-                nome = input("Qual o nome do aluno: ")
-                novoId = Sistema.gerarIdAluno()
-                
-                #Adicionao aluno ao banco de dados
-                novo_aluno = Alunos(novoId, nome)
-                Sistema.alunos[novoId] = novo_aluno
-                print(f"Aluno {nome} cadastrado, ID: {novoId}")
-
-                Sistema.salvar()
+                Utils.cadastrarAluno()
 
             #Adicionar a uma turma
             case 2:
-                #pegando informações da turma
-                nome = input("Qual o nome da turma: ")
-                novoId = Sistema.gerarIdTurma()
-
-                #Adicionando a turma ao banco de dados
-                novo_grupo = Turmas(novoId, nome)
-                Sistema.turmas[novoId] = novo_grupo
-                print(f"Turma {nome} cadastrada. ID: {novoId}")
-
-                Sistema.salvar()
+                Utils.criarTurma()
 
             #Adicionar/Transferir alunos entre grupos
             case 3:
@@ -93,40 +77,9 @@ def executarCadSystem():
                     print("Digite um ID válido")
                     continue
                 
-                #Checa se o aluno e a turma existem no sistema
-                if alunoIdAsk in Sistema.alunos and turmaIdAsk in Sistema.turmas:
-                    #Identifica o aluno
-                    aluno = Sistema.alunos[alunoIdAsk]
-                    #Identifica a turma
-                    turma = Sistema.turmas[turmaIdAsk]
-                else:
-                    print("Aluno ou Turma não encontrados.")
-                    continue
-                
-                #Identificando a turma
-                turma = Sistema.turmas[turmaIdAsk]
+                Utils.transferirALuno(alunoIdAsk, turmaIdAsk)
 
-                #Checando se o aluno já possui uma turma
-                if aluno.turma is not None:
-                    #identificando a turma do aluno
-                    turmaAntiga = Sistema.turmas[aluno.turma]
-                    #identifica e remove o aluno da turma
-                    if aluno.ID_ALUNO in turmaAntiga.alunos:
-                        turmaAntiga.alunos.remove(aluno.ID_ALUNO)
-
-                #Adiciona o iD da turma ás informações do aluno
-                aluno.turma = turma.ID_TURMA
-                #Adiciona o aluno ás informações da turma
-                turma.alunos.append(aluno.ID_ALUNO)
-
-                #Atualiza status automatico
-                Sistema.AtualizarStatus()
-
-                print("")
-                print(f"Aluno {aluno.nome} foi adicionado/transferido para turma {turma.nome}!")
-
-                Sistema.salvar()
-
+            #Listar alunos
             case 4:
                 Sistema.carregar()
                 Sistema.AtualizarStatus()
@@ -142,7 +95,7 @@ def executarCadSystem():
                     print("Digite um número válido")
                     continue
 
-                Sistema.ListarAlunos(listarAsk)
+                Utils.ListarAlunos(listarAsk)
 
             #Adicionar concluinte unico
             case 5:
@@ -156,12 +109,8 @@ def executarCadSystem():
                     print("ID aluno não encontrado")
                     continue
                 
-                #Adiciona o aluno ao sistema Concluintes 
-                Sistema.concluintes.add(concluinte.ID_ALUNO)
-                print(f"ID: {concluinte.ID_ALUNO} Aluno: {concluinte.nome} adicionado a CONCLUINTES")
+                Utils.adicionarConcluinte(concluinte)
 
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
             #Adicionar turma concluinte
             case 6:
                 #Perguntar o ID da turma
@@ -174,13 +123,7 @@ def executarCadSystem():
                     print("ID turma não encontrado")
                     continue
 
-                for aluno in Sistema.alunos.values():
-                    if aluno.turma == turmaX.ID_TURMA:
-                        Sistema.concluintes.add(aluno.ID_ALUNO)
-                        print("ID: {aluno.ID_ALUNO} Nome: {aluno.nome} adicionado a concluintes ")
-
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
+                Utils.AdicionarConcluintes()
 
             case 7:
                 print("Finalizado!")
