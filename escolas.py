@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class Escola:
+class Escolas:
     id_escola: int
     nome_escola: str 
     cidade: str 

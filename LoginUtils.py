@@ -1,3 +1,8 @@
+#Dependencias
+from professores import Professor
+from gestor import Gestor
+from Sistema import Sistema
+
 import json
 
 DBFile = "DataBase.json"
@@ -42,3 +47,19 @@ class Login:
         Login.salvarLogin(usuarios)
         print("Cadastro realizado com sucesso!")
         return True
+    
+    @staticmethod
+    def cadastrarLogin():
+        nome = Sistema.input_nao_vazio("Digite seu nome: ")
+        email = Sistema.input_nao_vazio("Digite seu Email: ")
+        senha = Sistema.input_nao_vazio("Digite sua senha: ")
+
+
+        if email in Sistema.professores:
+            print("Email ja existe: ")
+            return False
+        
+        profId = Sistema.gerarIdProfessor()
+
+        usuario = (profId,nome, email, senha)
+        
