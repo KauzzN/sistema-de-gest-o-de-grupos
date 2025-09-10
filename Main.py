@@ -1,9 +1,10 @@
  
 #Dependencias
-from LoginUtils import Login
 from alunos import Alunos, Turmas
 from Sistema import Sistema
 from Utils import Utils
+from gestor import Gestor
+from professores import Professor
 
 
 #login System
@@ -40,6 +41,7 @@ def mostrarMenuList():
         4. Listar alunos sem grupos
         5. Listar concluintes
 """)
+
 
 #Sistema de cadastro e gerencia
 def executarCadSystem():
@@ -166,4 +168,5 @@ while True:
             break
         
     mostrarMenuLogin()
+
 

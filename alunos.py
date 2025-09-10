@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#Dependencias
-from Sistema import Sistema
-=======
->>>>>>> 15d3a92c3fa958a4adb5dd75a2cb4b05b148e92f
+
 
 
 #Importando biblioteca de json
