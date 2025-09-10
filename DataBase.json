@@ -1,9 +1,12 @@
 {
     "alunos": {
-        
+        "1": {
+            "id_aluno": 1,
+            "nome": "kaynnan",
+            "turma": null,
+            "status": null
+        }
     },
-    "turmas": {
-       
-    },
+    "turmas": {},
     "concluintes": []
 }

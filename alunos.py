@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 #Dependencias
 from Sistema import Sistema
+=======
+>>>>>>> 15d3a92c3fa958a4adb5dd75a2cb4b05b148e92f
 
 
 #Importando biblioteca de json
@@ -13,7 +16,7 @@ class Alunos:
     def __init__(self, ID_ALUNO, nome):
         self.ID_ALUNO = ID_ALUNO
         self.nome = nome
-        self.turma = None
+        self.turma = None #quando criar a função criar_turma torcar esse valor para receber o id da turma ja criada
         self.status = None
 
 
@@ -21,18 +24,22 @@ class Alunos:
     def ToDict(self):
         return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma, "status": self.status}
 
-
 class Turmas:
-
+    def __init__(self, ID_TURMA, nome_turma, id_escola):
+        
     #inicializador da classe
-    def __init__(self, ID_TURMA, nome):
         self.ID_TURMA = ID_TURMA
-        self.nome = nome
-        self.alunos = []
+        self.nome_turma = nome_turma
+        self.id_escola = id_escola
+        self.lista_professor = []
+        self.lista_alunos = []
 
 
     #Adiciona o aluno a turma desejada
     def addAluno(self, aluno):
+        #Dependencias
+        from Sistema import Sistema
+
         #Checa se o aluno ja está na turma
         if aluno.turma:
             Sistema.turmas[aluno.turma].alunos.remove(aluno.ID_ALUNO)
