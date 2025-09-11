@@ -7,10 +7,48 @@ from alunos import Alunos, Turmas
 from gestor import Gestor
 from professores import Professor
 from escolas import Escolas
+from LoginUtils import Login
 
 
 #Sistema de cadastro e gerencia
 class Utils:
+
+    
+    #Menu inicial de Login
+    @staticmethod
+    def mostrarMenuLogin():
+        print("""
+        Oque deseja fazer?
+            1. Cadastrar Gestor
+            2. Efetuar login
+            3. Finalizar
+    """)
+    #Menu de gerencia dos alunos e turmas
+    @staticmethod
+    def mostrarMenuCad():
+        print("""
+        Menu cadastro:
+            1. Cadastrar aluno
+            2. Cadastrar escola
+            3. Cadastrar professor
+            4. Cadastrar Gestor
+            5. Criar turma  
+            6. Adicionar/Transferir aluno
+            7. Listar alunos/turmas
+            8. Adicionar turma concluinte
+            9. Finalizar
+    """)
+
+    @staticmethod
+    def mostrarMenuList():
+        print("""
+        Oque deseja listar?
+            1. Todos os alunos
+            2. Listar por turma  
+            3. Listar grupos
+            4. Listar alunos sem grupos
+            5. Listar concluintes
+    """)
 
     @classmethod
     def cadastrarAluno(cls):
@@ -168,12 +206,8 @@ class Utils:
 
     @staticmethod
     def PainelGestão():
-        painelAsk = int(input("Digite um numero")) 
-        match painelAsk:
-            #Menu Gestor
-            case 1:
-                while True:
-                    print("""
+        while True:
+            print("""
     1. Cadastrar escola
     2. Cadastrar professor
     3. Cadastrar turma
@@ -181,72 +215,73 @@ class Utils:
     5. Transferir aluno
     6. Adicionar Concluintes
     7. Listar Alunos
+    8. Finalizar
 """)
-                    Ask1 = int(input("> "))
-                    match Ask1:
-                        case 1:
-                            
-                            #Pegando os dados da escola a ser cadastrada
-                            nomeEscola = Sistema.input_nao_vazio("Digite o nome da escola: ")
-                            cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizads: ")
-                            bairro = Sistema.input_nao_vazio("Digite o bairro: ")
+            Ask1 = int(input("> "))
+            match Ask1:
+                #cadastrar escola
+                case 1:
+                    
+                    #Pegando os dados da escola a ser cadastrada
+                    nomeEscola = Sistema.input_nao_vazio("Digite o nome da escola: ")
+                    cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizads: ")
+                    bairro = Sistema.input_nao_vazio("Digite o bairro: ")
 
-                            #Gera um ID unico
-                            id_escola = Sistema.gerarIdEscola()
+                    #Gera um ID unico
+                    id_escola = Sistema.gerarIdEscola()
 
-                            #Adiciona a escola ao Sistema
-                            escolaRegistrada = Escolas(id_escola, nomeEscola, cidade, bairro)
-                            Sistema.escolas[id_escola] = escolaRegistrada
+                    #Adiciona a escola ao Sistema
+                    escolaRegistrada = Escolas(id_escola, nomeEscola, cidade, bairro)
+                    Sistema.escolas[id_escola] = escolaRegistrada
 
-                            #Printa as informações e salva no banco de dados
-                            print(f"ID: {id_escola} Nome: {nomeEscola} Registrada no sistema")
-                            Sistema.salvar()
+                    #Printa as informações e salva no banco de dados
+                    print(f"ID: {id_escola} Nome: {nomeEscola} Registrada no sistema")
+                    Sistema.salvar()
 
-                        case 2:
-                            
-                            #pegando informações da turma
-                            nome = Sistema.input_nao_vazio("Qual o nome da turma: ")
-                            novoId = Sistema.gerarIdTurma()
+                #Cadastrar professor
+                case 2:
+                    #Pegando os dados para cadastro do professor
+                    nome = Sistema.input_nao_vazio("Digite um nome: ")
+                    email = Sistema.input_nao_vazio("DIgite um email: ")
+                    senha = Sistema.input_nao_vazio("Digite uma senha: ")
 
-                            #Adicionando a turma ao banco de dados
-                            novo_grupo = Turmas(novoId, nome)
-                            Sistema.turmas[novoId] = novo_grupo
+                    #Salva o cadastro no banco de dados
+                    Login.cadastrarProfessor(nome, email, senha)
 
-                            print(f"Turma {nome} cadastrada. ID: {novoId}")
-                            Sistema.salvar()
+                #cadastra a turma
+                case 3:
+                    Utils.criarTurma()
+                    
+                case 4:
+                    Utils.cadastrarAluno()
+                
+                case 5:
+                    #prevenção de erro com valores
+                    try:
+                        #identifica o aluno e a turma que ele vai ser transferido
+                        alunoIdAsk = int(input("Digite o id do aluno: "))
+                        turmaIdAsk = int(input("Digite o Id da turma: "))
 
+                    except ValueError:
+                            print("Valor não identificado")
+                            continue
+                    
+                    #chamada de função para transferencia
+                    Utils.transferirALuno(alunoIdAsk, turmaIdAsk)
+                    
+                case 6:
+                    #inserir a turma a ser concluinte
+                    turma = int(input("Digite o ID da turma: "))
 
+                    Utils.AdicionarConcluintes(turma)
 
-                        case 3:
-                            pass
-                         
-                        case 4:
-                            pass
-                        
-                        case 5:
-                            pass
-                         
-                        case 6:
-                            pass
-                        
-                        case 7:
-                            pass
-                         
-                        case 8:
-                            pass
+                
+                case 7:
+                    Utils.mostrarMenuList()
+                    listarAsk = int(input("> "))
 
+                    Utils.ListarAlunos(listarAsk)
+                    
+                case 8:
+                    break
 
-    def cadastrar_professor(self):
-        nome_prof = input("Digite o nome do novo professor: ")
-        id_prof = len(self.professores) + 1
-        novo_professor = Professor(id_prof, nome_prof)
-        self.professores.append(novo_professor)
-        print(f"Professor {nome_prof} possui o id {id_prof:03d}")
-        return novo_professor
-    
-    def cadastrar_turma(self, id_escola):
-        nome_turma = input("Digite o nome da nova turma: ")
-        id_turma = len(self.turmas) + 1 
-        nova_turma = Turmas(id_turma, nome_turma, id_escola)
-        print(f"A turma {nome_turma} possui o id {id_turma}")
-        return nova_turma

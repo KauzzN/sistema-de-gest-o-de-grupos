@@ -1,9 +1,10 @@
 #Dependencias
-from escolas import Escola
+from escolas import Escolas
 import json
+import os
 
 DBFile = "DataBase.json"
-DBLfile = "DataBAseLogin.json"
+DBLfile = "DataBaseLogin.json"
 
 class Sistema:
     alunos = {}
@@ -29,17 +30,34 @@ class Sistema:
         with open(arquivo, "w", encoding = "utf-8") as file:
             json.dump(dados, file, indent = 4, ensure_ascii = False)
 
-    @classmethod
-    def salvarLogin(cls, arquivo = DBLfile):
 
-        dados = {
-            "professores": {id_p: professor.ToDict() for id_p, professor in cls.professores.items()},
-            "gestores": {id_g: gestor.ToDict() for id_g, gestor in cls.gestores.items()}
-            }
+    @staticmethod
+    def carregarLogins():
+        if not os.path.exists(DBLfile):
+            return {"professores": {}, "gestores": {}}
+        try:
+            with open(DBLfile, "r", encoding="utf-8") as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            # Caso o arquivo esteja vazio ou corrompido
+            return {"professores": {}, "gestores": {}}
+
+    @staticmethod
+    def salvarLogin(professores=None, gestores=None):
+        dados = Sistema.carregarLogins()
+        professores = professores or {}
+        gestores = gestores or {}
         
-        #abrindo o arquivo "DBFile" para rescrever adicionando as turmas
-        with open(arquivo, "w", encoding = "utf-8") as file:
-            json.dump(dados, file, indent = 4, ensure_ascii = False)
+        # Atualiza dados existentes
+        for id_p, prof in professores.items():
+            dados["professores"][str(id_p)] = prof.ToDict()
+        for id_g, ges in gestores.items():
+            dados["gestores"][str(id_g)] = ges.ToDict()
+
+        with open(DBLfile, "w", encoding="utf-8") as file:
+            json.dump(dados, file, indent=4, ensure_ascii=False)
+
+            
 
 
     #Atualizar status dos alunos
@@ -131,6 +149,13 @@ class Sistema:
         
         #Pega o numero maximo de escolas por ID
         return max(cls.professores.keys()) + 1
+    
+    @classmethod
+    def gerarIdGestor(cls):
+        if not cls.gestores:
+            return 1
+        
+        return max(cls.gestores.keys()) + 1
     
     
     @staticmethod

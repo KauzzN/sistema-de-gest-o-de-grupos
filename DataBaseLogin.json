@@ -1,0 +1,32 @@
+{
+    "professores": {},
+    "gestores": {
+        "1": {
+            "id_gestor": 1,
+            "nome_gestor": "b",
+            "email": "b",
+            "senha": "b",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        },
+        "2": {
+            "id_gestor": 2,
+            "nome_gestor": "pedro",
+            "email": "pedrinho",
+            "senha": "senha",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        },
+        "3": {
+            "id_gestor": 3,
+            "nome_gestor": "arthur",
+            "email": "alcantara",
+            "senha": "senha",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        }
+    }
+}
