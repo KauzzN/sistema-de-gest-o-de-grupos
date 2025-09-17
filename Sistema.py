@@ -1,11 +1,10 @@
-
 #Dependencias
 from escolas import Escolas
 import json
 import os
 
 DBFile = "DataBase.json"
-DBLfile = "DataBaseLogin.json"
+DBLfile = "DataBAseLogin.json"
 
 class Sistema:
     alunos = {}
@@ -31,34 +30,17 @@ class Sistema:
         with open(arquivo, "w", encoding = "utf-8") as file:
             json.dump(dados, file, indent = 4, ensure_ascii = False)
 
+    @classmethod
+    def salvarLogin(cls):
 
-    @staticmethod
-    def carregarLogins():
-        if not os.path.exists(DBLfile):
-            return {"professores": {}, "gestores": {}}
-        try:
-            with open(DBLfile, "r", encoding="utf-8") as file:
-                return json.load(file)
-        except json.JSONDecodeError:
-            # Caso o arquivo esteja vazio ou corrompido
-            return {"professores": {}, "gestores": {}}
-
-    @staticmethod
-    def salvarLogin(professores=None, gestores=None):
-        dados = Sistema.carregarLogins()
-        professores = professores or {}
-        gestores = gestores or {}
+        dados = {
+            "professores": {str(id_p): professor.ToDict() for id_p, professor in cls.professores.items()},
+            "gestores": {str(id_g): gestor.ToDict() for id_g, gestor in cls.gestores.items()}
+            }
         
-        # Atualiza dados existentes
-        for id_p, prof in professores.items():
-            dados["professores"][str(id_p)] = prof.ToDict()
-        for id_g, ges in gestores.items():
-            dados["gestores"][str(id_g)] = ges.ToDict()
-
-        with open(DBLfile, "w", encoding="utf-8") as file:
-            json.dump(dados, file, indent=4, ensure_ascii=False)
-
-            
+        #abrindo o arquivo "DBFile" para rescrever adicionando as turmas
+        with open(DBLfile, "w", encoding = "utf-8") as file:
+            json.dump(dados, file, indent = 4, ensure_ascii = False)
 
 
     #Atualizar status dos alunos
@@ -110,7 +92,44 @@ class Sistema:
         #checagem para não dar erro caso o aluno e a turma não seja encontrado
         except FileNotFoundError:
             cls.alunos, cls.turmas, cls.concluintes = {}, {}, set()
-    
+
+    @classmethod
+    def carregarLogins(cls):
+        #Dependencias
+        from gestor import Gestor
+        from professores import Professor
+
+        #Abre o arquivo "DBLfile"
+        if not os.path.exists(DBLfile):
+            cls.professores, cls.gestores = {}, {}
+            return {"professores": {}, "gestores": {}}
+
+        with open(DBLfile, "r", encoding = "utf-8") as file:
+            dados = json.load(file)
+
+        cls.professores = {
+            int(id_p): Professor(
+                id_professor=int(prof["id_professor"]),
+                email=prof["email"],
+                senha=prof["senha"],
+                nome_professor=prof["nome_professor"]
+            )
+            for id_p, prof in dados.get("professores", {}).items()
+                                 
+        }
+
+        cls.gestores = {
+            int(id_g): Gestor(
+                id_gestor=int(ges["id_gestor"]),
+                nome_gestor=ges["nome_gestor"],
+                email=ges["email"],
+                senha=ges["senha"]
+            )
+            for id_g, ges in dados.get("gestores", {}).items()
+        }
+
+
+
 
     #Gerando ID automatico do aluno
     @classmethod
@@ -153,9 +172,11 @@ class Sistema:
     
     @classmethod
     def gerarIdGestor(cls):
+        #checando se o dicionario Professores possui alguma ja datada
         if not cls.gestores:
             return 1
         
+        #Pega o numero maximo de escolas por ID
         return max(cls.gestores.keys()) + 1
     
     
@@ -166,4 +187,3 @@ class Sistema:
             if valor:
                 return valor
             print("O campo não pode ficar vazio!")
-

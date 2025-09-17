@@ -21,14 +21,14 @@ class Alunos:
         return {"id_aluno": self.ID_ALUNO, "nome": self.nome, "turma": self.turma, "status": self.status}
 
 class Turmas:
-    def __init__(self, ID_TURMA, nome_turma, id_escola):
+    def __init__(self, ID_TURMA, nome, id_escola):
         
     #inicializador da classe
         self.ID_TURMA = ID_TURMA
-        self.nome_turma = nome_turma
+        self.nome = nome
         self.id_escola = id_escola
-        self.lista_professor = []
-        self.lista_alunos = []
+        self.professor = []
+        self.alunos = []
 
 
     #Adiciona o aluno a turma desejada

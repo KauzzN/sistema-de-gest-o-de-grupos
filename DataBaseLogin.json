@@ -1,11 +1,19 @@
 {
-    "professores": {},
+    "professores": {
+        "1": {
+            "id_professor": 1,
+            "email": "pedro",
+            "senha": "pedro@gmail.com",
+            "nome_professor": "pedro",
+            "turmas": []
+        }
+    },
     "gestores": {
         "1": {
             "id_gestor": 1,
-            "nome_gestor": "b",
-            "email": "b",
-            "senha": "b",
+            "nome_gestor": "kaynnan",
+            "email": "jeckson",
+            "senha": "pereira",
             "professores": [],
             "escolas": [],
             "turmas": []
@@ -13,17 +21,35 @@
         "2": {
             "id_gestor": 2,
             "nome_gestor": "pedro",
-            "email": "pedrinho",
-            "senha": "senha",
+            "email": "alcantara",
+            "senha": "albuquerque",
             "professores": [],
             "escolas": [],
             "turmas": []
         },
         "3": {
             "id_gestor": 3,
-            "nome_gestor": "arthur",
-            "email": "alcantara",
-            "senha": "senha",
+            "nome_gestor": "jose",
+            "email": "pereira",
+            "senha": "silva",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        },
+        "4": {
+            "id_gestor": 4,
+            "nome_gestor": "lucas",
+            "email": "pedrosa",
+            "senha": "lixo",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        },
+        "5": {
+            "id_gestor": 5,
+            "nome_gestor": "a",
+            "email": "a",
+            "senha": "a",
             "professores": [],
             "escolas": [],
             "turmas": []

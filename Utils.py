@@ -68,9 +68,10 @@ class Utils:
         #pegando informações da turma
             nome = input("Qual o nome da turma: ")
             novoId = Sistema.gerarIdTurma()
+            IdEscola = input("Digite o ID da escola")
 
             #Adicionando a turma ao banco de dados
-            novo_grupo = Turmas(novoId, nome)
+            novo_grupo = Turmas(novoId, nome, IdEscola)
             Sistema.turmas[novoId] = novo_grupo
             print(f"Turma {nome} cadastrada. ID: {novoId}")
 
@@ -217,7 +218,15 @@ class Utils:
     7. Listar Alunos
     8. Finalizar
 """)
-            Ask1 = int(input("> "))
+            while True:
+                entrada = input("> ").strip()
+                if not entrada.isdigit():
+                    print("Digite um número válido!")
+                    continue
+                
+                Ask1 = int(entrada)
+                break
+
             match Ask1:
                 #cadastrar escola
                 case 1:

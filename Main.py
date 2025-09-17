@@ -6,6 +6,7 @@ from Sistema import Sistema
 from Utils import Utils
 from gestor import Gestor
 from professores import Professor
+from escolas import Escolas
 
 
 
