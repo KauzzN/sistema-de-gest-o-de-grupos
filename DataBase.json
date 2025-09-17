@@ -2,11 +2,24 @@
     "alunos": {
         "1": {
             "id_aluno": 1,
-            "nome": "kaynnan",
+            "nome": "pedro",
+            "turma": null,
+            "status": null
+        },
+        "2": {
+            "id_aluno": 2,
+            "nome": "lucas",
+            "turma": null,
+            "status": null
+        },
+        "3": {
+            "id_aluno": 3,
+            "nome": "celioo",
             "turma": null,
             "status": null
         }
     },
     "turmas": {},
+    "escolas": {},
     "concluintes": []
 }

@@ -4,62 +4,83 @@ from gestor import Gestor
 from Sistema import Sistema
 
 import json
+import os
 
-DBFile = "DataBase.json"
+DBLfile = "DataBaseLogin.json"
 
-class Login:
+class Login:    
 
-    #Carregar o banco de dados
+    #Cadastrar o login do professor
     @staticmethod
-    def carregarLogins():
+    def cadastrarProfessor(nome, email, senha):
+        #carrega os dados do "banco de dados"
+        dados = Login.carregarLogins()
+
+        #checa no banco de dados todos os logins cadastrados
+        for prof in dados["professores"].values():
+            #checa se existe um email ja cadastrado
+            if prof["email"] == email:
+                print("Email já está cadastrado!")
+                return False
         
-        try:
-            with open(DBFile, "r") as file:
-                return json.load(file)
-        except FileNotFoundError:
-            return {}
-    
-    #Salvar o login no banco de dados
-    @staticmethod
-    def salvarLogin(usuarios):
+        #identifica o profesor por um ID
+        novo_ID = Sistema.gerarIdProf()
+        professor = Professor(novo_ID, email, senha, nome)
 
-        with open(DBFile, "w") as file:
-            json.dump(usuarios, file, indent=4)
+        #salva o professor no banco de dados
+        dados ["professores"][str(novo_ID)] = professor.ToDict()
+        Sistema.salvarLogin(dados)
+
+
+        #adiciona o ID do professor ao dicionario Professores no sistema
+        Sistema.professores[novo_ID] = professor
+        print(f"Professor {nome} cadastrado com sucesso!")
+        return True
+
+    #Cadastra Login do gestor
+    @staticmethod
+    def cadastrarGestor(nome, email, senha):
+       #Carrega o banco de dados
+        dados = Sistema.carregarLogins()
+
+        #identifica cada gestor no banco de dados
+        for ges in dados["gestores"].values():
+            #checa se existe um email ja cadastrado no banco de dados
+            if ges["email"] == email:
+                print("Email já cadastrado!")
+                return False
+
+        #identifica o gestor por um novo ID
+        novo_ID = Sistema.gerarIdGestor()
+        gestor = Gestor(novo_ID, nome, email, senha)
+
+        #salva o login no banco de dados
+        dados ["gestores"][str(novo_ID)] = gestor.ToDict()
+        Sistema.salvarLogin(dados)
+
+        #adiciona o ID do gestor ao dicionario Gestores no sistema
+        Sistema.gestores[novo_ID] = gestor
+        print(f"Gestor {nome} cadastrado com sucesso!")
 
     #Validar o usuario
     @staticmethod
     def validarLogin(email, senha):
-        usuarios = Login.carregarLogins()
-        if email in usuarios and usuarios[email] == senha:
-            print("Login bem sucedido!")
-            return True
-        print("Usuario ou senha incorreto!")
-        return False
+        #Carrega o banco de dados
+        dados = Sistema.carregarLogins()
 
-    #Cadastrar Login
-    @staticmethod
-    def cadastrarLogin(email, senha):
-        usuarios = Login.carregarLogins()
-        if email in usuarios:
-            print("Esse usuario ja existe!")
-            return False
-        usuarios[email] = senha
-        Login.salvarLogin(usuarios)
-        print("Cadastro realizado com sucesso!")
-        return True
-    
-    @staticmethod
-    def cadastrarLogin():
-        nome = Sistema.input_nao_vazio("Digite seu nome: ")
-        email = Sistema.input_nao_vazio("Digite seu Email: ")
-        senha = Sistema.input_nao_vazio("Digite sua senha: ")
-
-
-        if email in Sistema.professores:
-            print("Email ja existe: ")
-            return False
+        #Le todos os professores no banco de dados
+        for prof_data in dados["professores"].values():
+            #CHeca se o email e senha inseridos são válidos
+            if prof_data["email"] == email and prof_data["senha"] ==senha:
+                print(f"Login bem-sucedido! Bem-vindo Professor {prof_data['nome_professor']}")
+                return Professor(**prof_data)
+            
+        #Le todos os gestores do banco de dados
+        for gestor_data in dados["gestores"].values():
+            #Checa se o email e senha inseridos são válidos
+            if gestor_data["email"] == email and gestor_data["senha"] == senha:
+                print(f"Login bem-sucedido! Bem-vindo Gestor {gestor_data['nome_gestor']}")
+                return Gestor(**gestor_data)
         
-        profId = Sistema.gerarIdProfessor()
-
-        usuario = (profId,nome, email, senha)
-        
+        print("Usuario ou senha incorretos!")
+        return None
