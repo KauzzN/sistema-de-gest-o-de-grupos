@@ -1,1 +1,16 @@
-{}
+
+
+{
+    "alunos": {
+        "1": {
+            "id_aluno": 1,
+            "nome": "lucas",
+            "turma": null,
+            "status": null
+        }
+    },
+    "turmas": {},
+    "escolas": {},
+    "concluintes": []
+}
+
