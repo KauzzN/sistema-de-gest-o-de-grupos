@@ -53,6 +53,15 @@
             "professores": [],
             "escolas": [],
             "turmas": []
+        },
+        "6": {
+            "id_gestor": 6,
+            "nome_gestor": "arthur",
+            "email": "arthurreidelas",
+            "senha": "arthur",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
         }
     }
 }

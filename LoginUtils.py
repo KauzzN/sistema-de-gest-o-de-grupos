@@ -14,7 +14,7 @@ class Login:
     @staticmethod
     def cadastrarProfessor(nome, email, senha):
         #carrega os dados do "banco de dados"
-        Sistema.carregarLogins()
+        Sistema.carregar()
 
         #checa no banco de dados todos os logins cadastrados
         for prof in Sistema.professores.values():
@@ -31,7 +31,7 @@ class Login:
         Sistema.professores[novo_ID] = professor
 
         #salva o professor no banco de dados
-        Sistema.salvarLogin()
+        Sistema.salvar()
 
         print(f"Professor {nome} cadastrado com sucesso!")
         return True
@@ -40,7 +40,7 @@ class Login:
     @staticmethod
     def cadastrarGestor(nome, email, senha):
        #Carrega o banco de dados
-        Sistema.carregarLogins()
+        Sistema.carregar()
 
         #identifica cada gestor no banco de dados
         for ges in Sistema.gestores.values():
@@ -56,7 +56,7 @@ class Login:
         Sistema.gestores[novo_ID] = gestor
 
         #salva o login no banco de dados
-        Sistema.salvarLogin()
+        Sistema.salvar()
 
         print(f"Gestor {nome} cadastrado com sucesso!")
 
@@ -64,7 +64,7 @@ class Login:
     @staticmethod
     def validarLogin(email, senha):
         #Carrega o banco de dados
-        Sistema.carregarLogins()
+        Sistema.carregar()
 
         #Le todos os professores no banco de dados
         for prof in Sistema.professores.values():

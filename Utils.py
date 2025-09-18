@@ -68,7 +68,7 @@ class Utils:
         #pegando informações da turma
             nome = input("Qual o nome da turma: ")
             novoId = Sistema.gerarIdTurma()
-            IdEscola = input("Digite o ID da escola")
+            IdEscola = input("Digite o ID da escola: ")
 
             #Adicionando a turma ao banco de dados
             novo_grupo = Turmas(novoId, nome, IdEscola)
@@ -116,12 +116,30 @@ class Utils:
                        turma.alunos.append(aluno.ID_ALUNO)
 
                 #Atualiza status automatico
-                Sistema.AtualizarStatus()
+                Sistema.salvar()
 
                 print("")
                 print(f"Aluno {aluno.nome} foi adicionado/transferido para turma {turma.nome}!")
 
                 Sistema.salvar()        
+
+    @classmethod
+    def cadastrarEscola(cls): 
+        #Pegando os dados da escola a ser cadastrada
+        nomeEscola = Sistema.input_nao_vazio("Digite o nome da escola: ")
+        cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizads: ")
+        bairro = Sistema.input_nao_vazio("Digite o bairro: ")
+
+        #Gera um ID unico
+        id_escola = Sistema.gerarIdEscola()
+
+        #Adiciona a escola ao Sistema
+        escolaRegistrada = Escolas(id_escola, nomeEscola, cidade, bairro)
+        Sistema.escolas[id_escola] = escolaRegistrada
+
+        #Printa as informações e salva no banco de dados
+        print(f"ID: {id_escola} Nome: {nomeEscola} Registrada no sistema")
+        Sistema.salvar()
 
     #Mudar o status do aluno para concluinte
     @classmethod
@@ -230,22 +248,7 @@ class Utils:
             match Ask1:
                 #cadastrar escola
                 case 1:
-                    
-                    #Pegando os dados da escola a ser cadastrada
-                    nomeEscola = Sistema.input_nao_vazio("Digite o nome da escola: ")
-                    cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizads: ")
-                    bairro = Sistema.input_nao_vazio("Digite o bairro: ")
-
-                    #Gera um ID unico
-                    id_escola = Sistema.gerarIdEscola()
-
-                    #Adiciona a escola ao Sistema
-                    escolaRegistrada = Escolas(id_escola, nomeEscola, cidade, bairro)
-                    Sistema.escolas[id_escola] = escolaRegistrada
-
-                    #Printa as informações e salva no banco de dados
-                    print(f"ID: {id_escola} Nome: {nomeEscola} Registrada no sistema")
-                    Sistema.salvar()
+                    Utils.cadastrarEscola()
 
                 #Cadastrar professor
                 case 2:

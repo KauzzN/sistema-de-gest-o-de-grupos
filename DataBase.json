@@ -1,16 +1,40 @@
-
-
 {
     "alunos": {
         "1": {
             "id_aluno": 1,
-            "nome": "lucas",
-            "turma": null,
+            "nome": "pedro",
+            "turma": 1,
             "status": null
         }
     },
-    "turmas": {},
-    "escolas": {},
-    "concluintes": []
+    "turmas": {
+        "1": {
+            "id_turma": 1,
+            "nome": "janga",
+            "alunos": [
+                1
+            ]
+        }
+    },
+    "escolas": {
+        "1": {
+            "id_escola": 1,
+            "nome_escola": "lababa",
+            "cidade": "pindaba",
+            "bairro": "barra"
+        }
+    },
+    "concluintes": [],
+    "professores": {},
+    "gestores": {
+        "1": {
+            "id_gestor": 1,
+            "nome_gestor": "kaynnan",
+            "email": "a",
+            "senha": "a",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        }
+    }
 }
-

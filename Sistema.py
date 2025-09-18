@@ -17,35 +17,25 @@ class Sistema:
 
     #Salva a turma e alunos no DataBase
     @classmethod
-    def salvar(cls, arquivo = DBFile):
+    def salvar(cls):
         #Juntando turma e alunos
         dados = {
             "alunos": {id_a: aluno.ToDict() for id_a, aluno in cls.alunos.items()},
             "turmas": {id_t: turma.ToDict() for id_t, turma in cls.turmas.items()},
             "escolas": {id_e: escola.ToDict() for id_e, escola in cls.escolas.items()},
+            "professores": {str(id_p): professor.ToDict() for id_p, professor in cls.professores.items()},
+            "gestores": {str(id_g): gestor.ToDict() for id_g, gestor in cls.gestores.items()},
             "concluintes": list(cls.concluintes)
         }
 
         #abrindo o arquivo "DBFile" para rescrever adicionando as turmas
-        with open(arquivo, "w", encoding = "utf-8") as file:
-            json.dump(dados, file, indent = 4, ensure_ascii = False)
-
-    @classmethod
-    def salvarLogin(cls):
-
-        dados = {
-            "professores": {str(id_p): professor.ToDict() for id_p, professor in cls.professores.items()},
-            "gestores": {str(id_g): gestor.ToDict() for id_g, gestor in cls.gestores.items()}
-            }
-        
-        #abrindo o arquivo "DBFile" para rescrever adicionando as turmas
-        with open(DBLfile, "w", encoding = "utf-8") as file:
+        with open(DBFile, "w", encoding = "utf-8") as file:
             json.dump(dados, file, indent = 4, ensure_ascii = False)
 
 
     #Atualizar status dos alunos
-    @staticmethod
-    def AtualizarStatus():
+    @classmethod
+    def AtualizarStatus(cls):
         #Lê todos os IDS de alunos e atualiza seu status para "ativo" ou "inativo"
         for id_aluno, aluno in Sistema.alunos.items():
             #checa se o aluno está em uma turma mas não concluiu
@@ -62,74 +52,77 @@ class Sistema:
 
     #Carregar o banco de dados
     @classmethod
-    def carregar(cls, arquivo = DBFile):
-        #Dependencias
-        from alunos import Alunos, Turmas
-        try:
-            #abre o arquivo "DBFile" para
-            with open(arquivo, "r", encoding = "utf-8") as file:
-                dados = json.load(file)
+    def carregar(cls):
+        import json
+import os
 
-            #identifica o aluno dentro da dataBase
-            cls.alunos = {
-                int(id_a): Alunos(int(id_a), info["nome"])
-                for id_a, info in dados.get("alunos", {}).items()
-            }
-            for id_a, info in dados.get("alunos", {}).items():
-                cls.alunos[int(id_a)].turma = info["turma"]
+DBFile = "DataBase.json"
 
-            #identifica a classe dentro da dataBase
-            cls.turmas = {
-                int(id_t): Turmas(int(id_t), info["nome"])
-                for id_t, info in dados.get("turmas", {}).items()
-            }
-            for id_t, info in dados.get("turmas", {}).items():
-                cls.turmas[int(id_t)].alunos = info["alunos"]
+class Sistema:
+    alunos = {}
+    turmas = {}
+    escolas = {}
+    professores = {}
+    gestores = {}
+    concluintes = set()
 
-            cls.concluintes = set(dados.get("concluintes", []))
-
-        
-        #checagem para não dar erro caso o aluno e a turma não seja encontrado
-        except FileNotFoundError:
-            cls.alunos, cls.turmas, cls.concluintes = {}, {}, set()
-
+    # Salvar tudo em um único JSON
     @classmethod
-    def carregarLogins(cls):
-        #Dependencias
-        from gestor import Gestor
+    def salvar(cls):
+        dados = {
+            "alunos": {id_a: aluno.ToDict() for id_a, aluno in cls.alunos.items()},
+            "turmas": {id_t: turma.ToDict() for id_t, turma in cls.turmas.items()},
+            "escolas": {id_e: escola.ToDict() for id_e, escola in cls.escolas.items()},
+            "concluintes": list(cls.concluintes),
+            "professores": {id_p: professor.ToDict() for id_p, professor in cls.professores.items()},
+            "gestores": {id_g: gestor.ToDict() for id_g, gestor in cls.gestores.items()}
+        }
+
+        with open(DBFile, "w", encoding="utf-8") as file:
+            json.dump(dados, file, indent=4, ensure_ascii=False)
+
+    # Carregar todos os dados
+    @classmethod
+    def carregar(cls):
+        from alunos import Alunos, Turmas
         from professores import Professor
+        from gestor import Gestor
 
-        #Abre o arquivo "DBLfile"
-        if not os.path.exists(DBLfile):
-            cls.professores, cls.gestores = {}, {}
-            return {"professores": {}, "gestores": {}}
+        if not os.path.exists(DBFile):
+            cls.alunos, cls.turmas, cls.escolas, cls.professores, cls.gestores, cls.concluintes = {}, {}, {}, {}, {}, set()
+            return
 
-        with open(DBLfile, "r", encoding = "utf-8") as file:
+        with open(DBFile, "r", encoding="utf-8") as file:
             dados = json.load(file)
 
+        cls.alunos = {
+            int(id_a): Alunos(int(id_a), info["nome"])
+            for id_a, info in dados.get("alunos", {}).items()
+        }
+        for id_a, info in dados.get("alunos", {}).items():
+            cls.alunos[int(id_a)].turma = info["turma"]
+
+        cls.turmas = {
+        int(id_t): Turmas(
+        int(id_t),
+        info["nome"],
+        info.get("id_escola", None)  # <-- usa None se não existir
+        )
+        for id_t, info in dados.get("turmas", {}).items()
+        }
+
+        cls.escolas = {
+                int(id_e): Escolas(int(id_e), info["nome_escola"], info["cidade"], info["bairro"])
+                for id_e, info in dados.get("escolas", {}).items()
+            }
+        cls.concluintes = set(dados.get("concluintes", []))
+
         cls.professores = {
-            int(id_p): Professor(
-                id_professor=int(prof["id_professor"]),
-                email=prof["email"],
-                senha=prof["senha"],
-                nome_professor=prof["nome_professor"]
-            )
-            for id_p, prof in dados.get("professores", {}).items()
-                                 
+            int(id_p): Professor(**prof) for id_p, prof in dados.get("professores", {}).items()
         }
-
         cls.gestores = {
-            int(id_g): Gestor(
-                id_gestor=int(ges["id_gestor"]),
-                nome_gestor=ges["nome_gestor"],
-                email=ges["email"],
-                senha=ges["senha"]
-            )
-            for id_g, ges in dados.get("gestores", {}).items()
+            int(id_g): Gestor(**ges) for id_g, ges in dados.get("gestores", {}).items()
         }
-
-
-
 
     #Gerando ID automatico do aluno
     @classmethod
@@ -141,7 +134,6 @@ class Sistema:
         #Pega o maior Id do dicionario Alunos e soma +1
         return max(cls.alunos.keys()) + 1
     
-
     #Gerando ID automatico da turma]
     @classmethod
     def gerarIdTurma(cls):
