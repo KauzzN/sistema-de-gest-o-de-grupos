@@ -1,15 +1,22 @@
 from dataclasses import dataclass,field
-from typing import List
+from typing import List, Optional
 
 @dataclass
 class Gestor:
-    id_gestor: int
     nome_gestor: str
-    email: str
-    senha: str
-    professores: List['Professor'] = field(default_factory=list)
-    escolas: List['Escola'] = field(default_factory=list)
-    turmas: List['Turmas'] = field(default_factory=list)
+    email: str = ""
+    senha: str = ""
+    id_gestor: Optional[int] = None
+    professores: List[int] = field(default_factory=list)
+    escolas: List[int] = field(default_factory=list)
+    turmas: List[int] = field(default_factory=list)
+
+    _next_id: int = field(init = False, default = 1, repr = False)
+
+    def __post_init__(self):
+        if self.id_gestor is None:    
+            self.id_gestor = Gestor._next_id
+            Gestor._next_id += 1
  
     def ToDict(self):
         return {

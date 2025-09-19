@@ -54,12 +54,22 @@ class Utils:
     def cadastrarAluno(cls):
         #pegando as informações do aluno
                 nome = input("Qual o nome do aluno: ")
-                novoId = Sistema.gerarIdAluno()
+                id_turma = int(input("Digite o ID da turma referida: "))
+
+                turma = Sistema.turmas.get(id_turma)
+                if turma is None:
+                    print("Turma não encontrada!")
+                    return
                 
                 #Adicionao aluno ao banco de dados
-                novo_aluno = Alunos(novoId, nome)
-                Sistema.alunos[novoId] = novo_aluno
-                print(f"Aluno {nome} cadastrado, ID: {novoId}")
+                novo_aluno = Alunos(nome = nome)
+                Sistema.alunos[novo_aluno.ID_ALUNO] = novo_aluno
+                print(f"Aluno {nome} cadastrado, ID: {novo_aluno.ID_ALUNO}")
+
+                #Adiciona o aluno a uma turma
+                novo_aluno.turma = turma.ID_TURMA
+                if novo_aluno.ID_ALUNO not in turma.alunos:
+                    turma.alunos.append(novo_aluno.ID_ALUNO)
 
                 Sistema.salvar()
 
@@ -67,98 +77,107 @@ class Utils:
     def criarTurma(cls):
         #pegando informações da turma
             nome = input("Qual o nome da turma: ")
-            novoId = Sistema.gerarIdTurma()
-            IdEscola = input("Digite o ID da escola: ")
+            id_escola = input("Digite o ID da escola: ")
 
             #Adicionando a turma ao banco de dados
-            novo_grupo = Turmas(novoId, nome, IdEscola)
-            Sistema.turmas[novoId] = novo_grupo
-            print(f"Turma {nome} cadastrada. ID: {novoId}")
+            nova_turma = Turmas(nome = nome, id_escola = id_escola)
+            Sistema.turmas[nova_turma.ID_TURMA] = nova_turma
+            print(f"Turma {nome} cadastrada. ID: {nova_turma.ID_TURMA}")
 
-            Sistema.salvar()    
-    
-    #Adicionar/Transferir alunos entre grupos
+            Sistema.salvar()   
+
+
     @classmethod
-    def transferirALuno(cls, alunoIdAsk, turmaIdAsk):
-                
-            while True:
-                #Checa se o aluno existe no sistema
-                if alunoIdAsk not in Sistema.alunos:
-                    print("Aluno não encontrado!")
-                    return
-                
-                #Checa se a turma existe no Sistema
-                if turmaIdAsk not in Sistema.turmas:
-                    print("Turma não encontrada!")
-                    return
-                
-                    #Identifica o aluno
-                aluno = Sistema.alunos[alunoIdAsk]
+    def transferirAluno(cls):
+        #Inserir os ID's do aluno e da turma referente
+        alunoIdAsk = int(input("Digite o ID do aluno: "))
+        turmaIdAsk = int(input("Digite o ID da turma: "))
 
-                    #Identifica a turma
-                turma = Sistema.turmas[turmaIdAsk]
+        #checando se o aluno existe
+        aluno = Sistema.alunos.get(alunoIdAsk)
+        if aluno is None:
+            print("Aluno não encontrado!")
+            return
+        
+        #Checando se a turma existe
+        turma = Sistema.turmas.get(turmaIdAsk)
+        if turma is None:
+            print("Turma não encontrada!")
+            return
 
-                #Checando se o aluno já possui uma turma
-                if aluno.turma is not None:
+        #Checando se o aluno já possui uma turma e removendo caso necessario
+        if aluno.turma:
+            turmaAntiga = Sistema.turmas.get(aluno.turma)
+            if turmaAntiga and aluno.ID_ALUNO in turmaAntiga.alunos:
+                turmaAntiga.alunos.remove(aluno.ID_ALUNO)
 
-                    #identificando a turma do aluno
-                    turmaAntiga = Sistema.turmas[aluno.turma]
+        #Adicionando o aluno a turma escolhida
+        aluno.turma = turma.ID_TURMA
+        if aluno.ID_ALUNO not in turma.alunos:
+            turma.alunos.append(aluno.ID_ALUNO)
 
-                    #identifica e remove o aluno da turma
-                    if aluno.ID_ALUNO in turmaAntiga.alunos:
-                        turmaAntiga.alunos.remove(aluno.ID_ALUNO)
+        #Salvando as alterações
+        Sistema.salvar()
+        print(f"ID: {aluno.ID_ALUNO} Aluno: {aluno.nome} transferido para turma {turma.nome}")
 
-                #Adiciona o iD da turma ás informações do aluno
-                aluno.turma = turma.ID_TURMA
+    @classmethod
+    def transferirProf(cls):
 
-                #Adiciona o aluno ás informações da turma
-                if aluno.ID_ALUNO not in turma.alunos:
-                       turma.alunos.append(aluno.ID_ALUNO)
+        #Inserir os ID's do prof e da turma referente
+        profIdAsk = int(input("Digite o ID do aluno: "))
+        turmaIdAsk = int(input("Digite o ID da turma: "))
 
-                #Atualiza status automatico
-                Sistema.salvar()
+        #checando se o prof existe
+        prof = Sistema.professores.get(profIdAsk)
+        if prof is None:
+            print("Aluno não encontrado!")
+            return
+        
+        #Checando se a turma existe
+        turma = Sistema.turmas.get(turmaIdAsk)
+        if turma is None:
+            print("Turma não encontrada!")
+            return
 
-                print("")
-                print(f"Aluno {aluno.nome} foi adicionado/transferido para turma {turma.nome}!")
+        #Checando se o professor já possui uma turma e removendo caso necessario
+        for id_antiga in prof.turmas:
+            turmaAntiga = Sistema.turmas.get(id_antiga)
+            if turmaAntiga and prof.ID_ALUNO in turmaAntiga.professores:
+                turmaAntiga.professorews.remove(prof.id_professor)
 
-                Sistema.salvar()        
+        #Adicionando o aluno a turma escolhida
+        prof.turma = turma.ID_TURMA
+        if prof.id_professor not in turma.professores:
+            turma.professores.append(prof.ID_ALUNO)
+
+        #Salvando as alterações
+        Sistema.salvar()
+        print(f"ID: {prof.ID_ALUNO} Aluno: {prof.nome} transferido para turma {turma.nome}")
+    
 
     @classmethod
     def cadastrarEscola(cls): 
         #Pegando os dados da escola a ser cadastrada
         nomeEscola = Sistema.input_nao_vazio("Digite o nome da escola: ")
-        cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizads: ")
+        cidade = Sistema.input_nao_vazio("Digite a cidade onde está localizada: ")
         bairro = Sistema.input_nao_vazio("Digite o bairro: ")
 
-        #Gera um ID unico
-        id_escola = Sistema.gerarIdEscola()
-
         #Adiciona a escola ao Sistema
-        escolaRegistrada = Escolas(id_escola, nomeEscola, cidade, bairro)
-        Sistema.escolas[id_escola] = escolaRegistrada
+        escolaRegistrada = Escolas(nomeEscola, cidade, bairro)
+        Sistema.escolas[escolaRegistrada.id_escola] = escolaRegistrada
 
         #Printa as informações e salva no banco de dados
-        print(f"ID: {id_escola} Nome: {nomeEscola} Registrada no sistema")
+        print(f"ID: {escolaRegistrada.id_escola} Nome: {nomeEscola} Registrada no sistema")
         Sistema.salvar()
 
-    #Mudar o status do aluno para concluinte
-    @classmethod
-    def adicionarConcluinte(cls, concluinte):
-            #Adicionar concluinte unico
-                
-                #Adiciona o aluno ao sistema Concluintes 
-                Sistema.concluintes.add(concluinte.ID_ALUNO)
-                print(f"ID: {concluinte.ID_ALUNO} Aluno: {concluinte.nome} adicionado a CONCLUINTES")
-
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
 
     #Mudar status dos alunos de uma turma para concluintes
     @classmethod
-    def AdicionarConcluintes(cls, turmaX):
+    def AdicionarConcluintes(cls):
+                turma = int(input("Digite o ID da turma: "))
 
                 for aluno in Sistema.alunos.values():
-                    if aluno.turma == turmaX.ID_TURMA:
+                    if aluno.turma == turma.ID_TURMA:
                         Sistema.concluintes.add(aluno.ID_ALUNO)
                         print("ID: {aluno.ID_ALUNO} Nome: {aluno.nome} adicionado a concluintes ")
 
@@ -232,9 +251,10 @@ class Utils:
     3. Cadastrar turma
     4. Cadastrar aluno
     5. Transferir aluno
-    6. Adicionar Concluintes
-    7. Listar Alunos
-    8. Finalizar
+    6. Transferir professor
+    7. Adicionar Concluintes
+    8. Listar Alunos
+    9. Finalizar
 """)
             while True:
                 entrada = input("> ").strip()
@@ -256,38 +276,31 @@ class Utils:
                     nome = Sistema.input_nao_vazio("Digite um nome: ")
                     email = Sistema.input_nao_vazio("DIgite um email: ")
                     senha = Sistema.input_nao_vazio("Digite uma senha: ")
+                    id_turma = int(input("digite o ID da turma referida: "))
 
                     #Salva o cadastro no banco de dados
-                    Login.cadastrarProfessor(nome, email, senha)
+                    Login.cadastrarProfessor(nome, email, senha, id_turma)
 
                 #cadastra a turma
                 case 3:
                     Utils.criarTurma()
                     
+                #Cadastrar aluno
                 case 4:
                     Utils.cadastrarAluno()
                 
+                #Transferir aluno
                 case 5:
-                    #prevenção de erro com valores
-                    try:
-                        #identifica o aluno e a turma que ele vai ser transferido
-                        alunoIdAsk = int(input("Digite o id do aluno: "))
-                        turmaIdAsk = int(input("Digite o Id da turma: "))
+                    Utils.transferirAluno()
 
-                    except ValueError:
-                            print("Valor não identificado")
-                            continue
-                    
-                    #chamada de função para transferencia
-                    Utils.transferirALuno(alunoIdAsk, turmaIdAsk)
-                    
+                #Adicionar concluintes 
                 case 6:
                     #inserir a turma a ser concluinte
                     turma = int(input("Digite o ID da turma: "))
 
                     Utils.AdicionarConcluintes(turma)
 
-                
+                #Listar alunos
                 case 7:
                     Utils.mostrarMenuList()
                     listarAsk = int(input("> "))

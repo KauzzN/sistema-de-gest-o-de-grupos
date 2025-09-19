@@ -1,15 +1,22 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 @dataclass
 class Professor:
-    id_professor: int
-    email: str
-    senha: str 
-    nome_professor: str 
-    turmas: List["Turmas"] = field(default_factory=list)
-                 
     
+    id_professor: Optional[int] = None
+    email: str = ""
+    senha: str = ""
+    nome_professor: str = ""
+    turmas: List[int] = field(default_factory=list)
+
+    _next_id: int = field(init=False, default=1, repr=False)
+                 
+    def __post_init__(self):
+        if self.id_professor is None:
+            self.id_professor = Professor._next_id
+            Professor._next_id += 1
+
     def ToDict(self):
         return {
             "id_professor": self.id_professor,

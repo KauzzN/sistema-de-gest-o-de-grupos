@@ -4,28 +4,44 @@
             "id_aluno": 1,
             "nome": "pedro",
             "turma": 1,
-            "status": null
+            "status": ""
         }
     },
     "turmas": {
         "1": {
             "id_turma": 1,
-            "nome": "janga",
-            "alunos": [
+            "nome": "turma 6",
+            "professores": "1",
+            "alunos": [],
+            "id_escola": null
+        },
+        "2": {
+            "id_turma": 2,
+            "nome": "turma 7",
+            "professores": [
                 1
-            ]
+            ],
+            "alunos": [],
+            "id_escola": null
         }
     },
     "escolas": {
         "1": {
-            "id_escola": 1,
-            "nome_escola": "lababa",
-            "cidade": "pindaba",
-            "bairro": "barra"
+            "id_escola": "mangueira",
+            "nome_escola": 1,
+            "cidade": "santa monica",
+            "bairro": "pedras de fogo"
         }
     },
-    "concluintes": [],
-    "professores": {},
+    "professores": {
+        "1": {
+            "id_professor": 1,
+            "email": "arthurzinho.com",
+            "senha": "senha",
+            "nome_professor": "arthur",
+            "turmas": []
+        }
+    },
     "gestores": {
         "1": {
             "id_gestor": 1,
@@ -36,5 +52,6 @@
             "escolas": [],
             "turmas": []
         }
-    }
+    },
+    "concluintes": []
 }

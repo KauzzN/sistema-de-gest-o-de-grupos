@@ -12,9 +12,15 @@ class Login:
 
     #Cadastrar o login do professor
     @staticmethod
-    def cadastrarProfessor(nome, email, senha):
+    def cadastrarProfessor(nome_professor, email, senha, id_turma):
+
         #carrega os dados do "banco de dados"
         Sistema.carregar()
+
+        turma = Sistema.turmas.get(id_turma)
+        if turma is None:
+            print("Turma não encontrada!")
+            return
 
         #checa no banco de dados todos os logins cadastrados
         for prof in Sistema.professores.values():
@@ -24,21 +30,27 @@ class Login:
                 return False
         
         #identifica o profesor por um ID
-        novo_ID = Sistema.gerarIdProf()
-        professor = Professor(novo_ID, nome, email, senha)
+        professor = Professor(nome_professor = nome_professor, email = email, senha = senha)
 
         #adiciona o ID do professor ao dicionario Professores no sistema
-        Sistema.professores[novo_ID] = professor
+        Sistema.professores[professor.id_professor] = professor
+
+        if not isinstance(turma.professores , list):
+            turma.professores = []
+
+        #adiciona o professor a uma turma
+        if professor.id_professor not in turma.professores:
+            turma.professores.append(professor.id_professor)
 
         #salva o professor no banco de dados
         Sistema.salvar()
 
-        print(f"Professor {nome} cadastrado com sucesso!")
+        print(f"Professor {nome_professor} cadastrado com sucesso!")
         return True
 
     #Cadastra Login do gestor
     @staticmethod
-    def cadastrarGestor(nome, email, senha):
+    def cadastrarGestor(nome_gestor, email, senha):
        #Carrega o banco de dados
         Sistema.carregar()
 
@@ -50,15 +62,14 @@ class Login:
                 return False
 
         #identifica o gestor por um novo ID
-        novo_ID = Sistema.gerarIdGestor()
-        gestor = Gestor(novo_ID, nome, email, senha)
+        gestor = Gestor(nome_gestor = nome_gestor, email = email, senha = senha)
 
-        Sistema.gestores[novo_ID] = gestor
+        Sistema.gestores[gestor.id_gestor] = gestor
 
         #salva o login no banco de dados
         Sistema.salvar()
 
-        print(f"Gestor {nome} cadastrado com sucesso!")
+        print(f"Gestor {nome_gestor} cadastrado com sucesso!")
 
     #Validar o usuario
     @staticmethod
