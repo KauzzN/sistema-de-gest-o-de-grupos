@@ -43,7 +43,12 @@ class Sistema:
             dados = json.load(file)
 
         cls.alunos = {
-            int(id_a): Alunos(int(id_a), info["nome"])
+            int(id_a): Alunos(int(id_a),
+            nome=info["nome"],
+            turma=info.get("turma"),
+            status=info.get("status"),
+            faltas=info.get("faltas")
+            )
             for id_a, info in dados.get("alunos", {}).items()
         }
         for id_a, info in dados.get("alunos", {}).items():
@@ -51,16 +56,18 @@ class Sistema:
 
         cls.turmas = {
             int(id_t): Turmas(
-            int(id_t),
-            info["nome"],
-            info.get("id_escola", None)  # <-- usa None se não existir
-        )
-        for id_t, info in dados.get("turmas", {}).items()
-        }
+                ID_TURMA=int(id_t),
+                nome=info["nome"],
+                id_escola=info.get("id_escola", None),
+                professores=info.get("professores") or [],
+                alunos=info.get("Alunos") or [] 
+    )
+    for id_t, info in dados.get("turmas", {}).items()
+} 
 
         cls.escolas = {
-                int(id_e): Escolas(int(id_e), info["nome_escola"], info["cidade"], info["bairro"])
-                for id_e, info in dados.get("escolas", {}).items()
+            int(id_e): Escolas(int(id_e), info["nome_escola"], info["cidade"], info["bairro"])
+            for id_e, info in dados.get("escolas", {}).items()
         }
         cls.concluintes = set(dados.get("concluintes", []))
 

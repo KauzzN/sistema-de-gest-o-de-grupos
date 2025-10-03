@@ -2,42 +2,52 @@
     "alunos": {
         "1": {
             "id_aluno": 1,
-            "nome": "pedro",
+            "nome": "lucas",
             "turma": 1,
-            "status": ""
+            "status": "",
+            "faltas": 0
+        },
+        "2": {
+            "id_aluno": 2,
+            "nome": "pedro",
+            "turma": null,
+            "status": "",
+            "faltas": 0
+        },
+        "3": {
+            "id_aluno": 3,
+            "nome": "arthur",
+            "turma": null,
+            "status": "",
+            "faltas": 0
         }
     },
     "turmas": {
         "1": {
             "id_turma": 1,
-            "nome": "turma 6",
-            "professores": "1",
-            "alunos": [],
-            "id_escola": null
-        },
-        "2": {
-            "id_turma": 2,
             "nome": "turma 7",
             "professores": [
                 1
             ],
-            "alunos": [],
-            "id_escola": null
+            "alunos": [
+                1
+            ],
+            "id_escola": "1"
         }
     },
     "escolas": {
         "1": {
-            "id_escola": "mangueira",
+            "id_escola": 1,
             "nome_escola": 1,
-            "cidade": "santa monica",
-            "bairro": "pedras de fogo"
+            "cidade": 1,
+            "bairro": 1
         }
     },
     "professores": {
         "1": {
             "id_professor": 1,
-            "email": "arthurzinho.com",
-            "senha": "senha",
+            "email": "arthurzito",
+            "senha": "arthur",
             "nome_professor": "arthur",
             "turmas": []
         }

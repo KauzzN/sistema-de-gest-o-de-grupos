@@ -14,6 +14,7 @@ class Alunos:
     nome: str = ""
     turma: int = None
     status: str = ""
+    faltas: int = 0
 
     _next_id: int = field(init = False, default = 1, repr = False)
 
@@ -28,7 +29,8 @@ class Alunos:
             "id_aluno": self.ID_ALUNO,
             "nome": self.nome, 
             "turma": self.turma, 
-            "status": self.status
+            "status": self.status,
+            "faltas": self.faltas
         }
 
 @dataclass
@@ -46,6 +48,12 @@ class Turmas:
         if self.ID_TURMA is None:
             self.ID_TURMA = Turmas._next_id
             Turmas._next_id += 1
+        
+        #Impedindo de alunos e professores vir como None
+        if self.professores is None:
+            self.professores = []
+        if self.alunos is None:
+            self.alunos = []
     
 
     #Transforma a turma em dicionario

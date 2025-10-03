@@ -54,22 +54,11 @@ class Utils:
     def cadastrarAluno(cls):
         #pegando as informações do aluno
                 nome = input("Qual o nome do aluno: ")
-                id_turma = int(input("Digite o ID da turma referida: "))
-
-                turma = Sistema.turmas.get(id_turma)
-                if turma is None:
-                    print("Turma não encontrada!")
-                    return
                 
                 #Adicionao aluno ao banco de dados
                 novo_aluno = Alunos(nome = nome)
                 Sistema.alunos[novo_aluno.ID_ALUNO] = novo_aluno
                 print(f"Aluno {nome} cadastrado, ID: {novo_aluno.ID_ALUNO}")
-
-                #Adiciona o aluno a uma turma
-                novo_aluno.turma = turma.ID_TURMA
-                if novo_aluno.ID_ALUNO not in turma.alunos:
-                    turma.alunos.append(novo_aluno.ID_ALUNO)
 
                 Sistema.salvar()
 
@@ -85,6 +74,27 @@ class Utils:
             print(f"Turma {nome} cadastrada. ID: {nova_turma.ID_TURMA}")
 
             Sistema.salvar()   
+
+    @classmethod
+    def adicionarFalta(cls):
+        Sistema.carregar()
+
+        try:
+            alunoIdAsk = int(input("Digite o ID do aluno: "))
+        except ValueError:
+            print("ID não identificado!")
+            return
+
+        aluno = Sistema.alunos.get(alunoIdAsk)
+        if aluno is None:
+            print("Aluno não encontrado!")
+            return
+
+        print(aluno.faltas)
+        aluno.faltas += 1
+        Sistema.salvar()
+        print(f"Falta adicionada para aluno {aluno.nome}")
+        print(aluno.faltas)
 
 
     @classmethod
@@ -124,7 +134,7 @@ class Utils:
     def transferirProf(cls):
 
         #Inserir os ID's do prof e da turma referente
-        profIdAsk = int(input("Digite o ID do aluno: "))
+        profIdAsk = int(input("Digite o ID do Professor: "))
         turmaIdAsk = int(input("Digite o ID da turma: "))
 
         #checando se o prof existe
@@ -143,16 +153,16 @@ class Utils:
         for id_antiga in prof.turmas:
             turmaAntiga = Sistema.turmas.get(id_antiga)
             if turmaAntiga and prof.ID_ALUNO in turmaAntiga.professores:
-                turmaAntiga.professorews.remove(prof.id_professor)
+                turmaAntiga.professores.remove(prof.id_professor)
 
         #Adicionando o aluno a turma escolhida
         prof.turma = turma.ID_TURMA
         if prof.id_professor not in turma.professores:
-            turma.professores.append(prof.ID_ALUNO)
+            turma.professores.append(prof.id_professor)
 
         #Salvando as alterações
         Sistema.salvar()
-        print(f"ID: {prof.ID_ALUNO} Aluno: {prof.nome} transferido para turma {turma.nome}")
+        print(f"ID: {prof.id_professor} Aluno: {prof.nome_professor} transferido para turma {turma.nome}")
     
 
     @classmethod
@@ -170,10 +180,42 @@ class Utils:
         print(f"ID: {escolaRegistrada.id_escola} Nome: {nomeEscola} Registrada no sistema")
         Sistema.salvar()
 
+    @classmethod
+    def removerProfessor(cls):
+        #Dependencias
+        Sistema.carregar()
+
+        #Inserindo os dados
+        try:
+            profIdAsk = int(input("Digite o ID do professor: "))
+            turmaIdAsk = int(input("Digite o ID da turma: "))
+        except ValueError:
+            print("Digite um ID válido!")
+            return
+        #Checando se professor existe
+        prof = Sistema.professores.get(profIdAsk)
+        if prof is None:
+            print("ID do professor não identificado!")
+            return
+
+        #Checando se turma existe
+        turma = Sistema.turmas.get(turmaIdAsk)
+        if turma is None:
+            print("ID da turma não identificado!")
+            return
+
+        
+        if profIdAsk in turma.professores:
+            turma.professores.remove(profIdAsk)
+            print(f"Professor removido da turma: {turma.nome}!")
+            Sistema.salvar()
+
+        else:
+            print("Professor não está na turma!")
 
     #Mudar status dos alunos de uma turma para concluintes
     @classmethod
-    def AdicionarConcluintes(cls):
+    def adicionarConcluintes(cls):
                 turma = int(input("Digite o ID da turma: "))
 
                 for aluno in Sistema.alunos.values():
@@ -186,61 +228,53 @@ class Utils:
 
     #Listar alunos de forma separada ou conjunta
     @classmethod
-    def ListarAlunos(cls, opcao):
-        #Decide qual opção o usuario irá usar
+    def Listar(cls):
+        Sistema.carregar()
+        print("""
+        Oque deseja listar?
+            1. Todos os alunos
+            2. Listar alunos sem turma
+            3. Listar por turmas
+            4. Listar turmas
+            5. Listar concluintes
+    """)
+
+        opcao = int(input("> "))
+
         match opcao:
-            #Lista todos os alunos ativos
+
+            #Listar todos os alunos
             case 1:
-                #percorre a lista vendo todos os alunos
-                for aluno in cls.alunos.values():
-                    #Checa se os alunos são ativos
-                    if aluno.status == "ativo":
-                        #checa se os alunos não tem turmas
-                        if aluno.turma is None:
-                            #Diz que o aluno não possui uma turma
-                            turma_nome = "sem turma"
-                    
-                        #nomea a turma caso o aluno possua uma
-                        else:
-                            turma_nome = cls.aluno[aluno.turma].nome
-                    
-                        #Lista todos os alunos e sua turma
-                        print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome}, Turma: {turma_nome}")
-                
-            
-            #Lista os usuarios por turma
+                if Sistema.alunos is None:
+                    print("Nenhum aluno cadastrado!")
+
+                for ID_ALUNO, aluno in Sistema.alunos.items():
+                    if aluno.turma is None:
+                        print(f"Aluno: {aluno.nome} ID: {aluno.ID_ALUNO}, sem Turma")
+                    else:
+                        print(f"Aluno: {aluno.nome} ID: {aluno.ID_ALUNO}, turma: {aluno.turma}")
+
+            #Listar alunos sem turmas
             case 2:
-                #escolhe qual turma checar
-                turmaID = int(input("Digite o ID da turma "))
-                
-                #Checa se a turma existe
-                if turmaID not in cls.turmas:
-                    print("Turma não encontrada!")
+                if Sistema.alunos is None:
+                    print("Nenhum aluno sem turma!")
                     return
 
-                turma = cls.turmas[turmaID]
-                
-                #Mostra todos os alunos na turma desejada
-                for aluno in cls.alunos.values():
-                    if aluno.turma == turma.ID_TURMA:
-                        print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome}")
-
-            #Lista todas as turmas do sistema
-            case 3:
-                for turma in cls.turmas.values():
-                    print(f"ID: {turma.ID_TURMA} Nome: {turma.nome}")
-
-            #Lista todos os alunos sem turmas
-            case 4: 
-                for aluno in cls.alunos.values():
+                for ID_ALUNO, aluno in Sistema.alunos.items():
                     if aluno.turma is None:
-                        print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome} Status: {aluno.status}")
+                        print(f"Aluno: {aluno.nome} ID: {aluno.ID_ALUNO}")
 
-            #Lista todos os concluintes
-            case 5:
-                for id_aluno in cls.concluintes:
-                    aluno = cls.alunos[id_aluno]
-                    print(f"ID: {aluno.ID_ALUNO} Nome: {aluno.nome}")
+            #Listar por turmas
+            case 3:
+                turmaIdAsk = int(input("Digite o iD da turma: "))
+
+                turma = Sistema.turmas.get(turmaIdAsk)
+                if turma is None:
+                    print("Turma não encontrada!")
+                    return
+                
+                for ID_ALUNO, aluno in turma.alunos:
+                    print(f"Aluno {aluno.nome} ID: {aluno.ID_ALUNO}")
 
     @staticmethod
     def PainelGestão():
@@ -254,7 +288,9 @@ class Utils:
     6. Transferir professor
     7. Adicionar Concluintes
     8. Listar Alunos
-    9. Finalizar
+    9. Remover Professor
+    10. Adicionar Falta
+    11. Finalizar
 """)
             while True:
                 entrada = input("> ").strip()
@@ -293,20 +329,26 @@ class Utils:
                 case 5:
                     Utils.transferirAluno()
 
-                #Adicionar concluintes 
+                #Transferir professor
                 case 6:
-                    #inserir a turma a ser concluinte
-                    turma = int(input("Digite o ID da turma: "))
+                    Utils.transferirProf()
 
-                    Utils.AdicionarConcluintes(turma)
-
-                #Listar alunos
+                #Adicionar concluintes
                 case 7:
-                    Utils.mostrarMenuList()
-                    listarAsk = int(input("> "))
-
-                    Utils.ListarAlunos(listarAsk)
+                    Utils.adicionarConcluintes()
                     
+                #Listar
                 case 8:
-                    break
+                    Utils.Listar()
+                    
+                #Remover Professor
+                case 9:
+                    Utils.removerProfessor()
 
+                #Adicionar Faltas
+                case 10:
+                    Utils.adicionarFalta()
+
+                #Finalizar
+                case 11:
+                    break
