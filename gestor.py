@@ -6,7 +6,7 @@ class Gestor:
     nome_gestor: str
     email: str = ""
     senha: str = ""
-    id_gestor: Optional[int] = None
+    id_gestor: Optional[int] = None #type: ignore
     professores: List[int] = field(default_factory=list)
     escolas: List[int] = field(default_factory=list)
     turmas: List[int] = field(default_factory=list)
@@ -24,13 +24,8 @@ class Gestor:
             "nome_gestor": self.nome_gestor,
             "email": self.email,
             "senha": self.senha,
-            "professores": [prof.id_professor for prof in self.professores],
-            "escolas": [es.id_escola for es in self.escolas],
-            "turmas": [t.ID_TURMA for t in self.turmas]
-        }   
+            "professores": self.professores,
+            "escolas": self.escolas,
+            "turmas": self.turmas
+        }  
     
-    
-        
-
-
-

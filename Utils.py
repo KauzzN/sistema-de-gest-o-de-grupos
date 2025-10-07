@@ -60,6 +60,8 @@ class Utils:
                 Sistema.alunos[novo_aluno.ID_ALUNO] = novo_aluno
                 print(f"Aluno {nome} cadastrado, ID: {novo_aluno.ID_ALUNO}")
 
+                novo_aluno.status = "inativo"
+
                 Sistema.salvar()
 
     @classmethod
@@ -126,6 +128,10 @@ class Utils:
         if aluno.ID_ALUNO not in turma.alunos:
             turma.alunos.append(aluno.ID_ALUNO)
 
+        #Alterando o status do aluno
+        if aluno.status == "inativo":
+            aluno.status = "ativo"
+
         #Salvando as alterações
         Sistema.salvar()
         print(f"ID: {aluno.ID_ALUNO} Aluno: {aluno.nome} transferido para turma {turma.nome}")
@@ -153,7 +159,7 @@ class Utils:
         for id_antiga in prof.turmas:
             turmaAntiga = Sistema.turmas.get(id_antiga)
             if turmaAntiga and prof.ID_ALUNO in turmaAntiga.professores:
-                turmaAntiga.professores.remove(prof.id_professor)
+                turmaAntiga.professores.remove(prof.id_professor) 
 
         #Adicionando o aluno a turma escolhida
         prof.turma = turma.ID_TURMA
@@ -204,7 +210,7 @@ class Utils:
             print("ID da turma não identificado!")
             return
 
-        
+        #Checando se o professor está na turma selecionada e removendo ele
         if profIdAsk in turma.professores:
             turma.professores.remove(profIdAsk)
             print(f"Professor removido da turma: {turma.nome}!")
@@ -216,15 +222,37 @@ class Utils:
     #Mudar status dos alunos de uma turma para concluintes
     @classmethod
     def adicionarConcluintes(cls):
-                turma = int(input("Digite o ID da turma: "))
+        #Carregando banco de dados
+        Sistema.carregar()
 
-                for aluno in Sistema.alunos.values():
-                    if aluno.turma == turma.ID_TURMA:
-                        Sistema.concluintes.add(aluno.ID_ALUNO)
-                        print("ID: {aluno.ID_ALUNO} Nome: {aluno.nome} adicionado a concluintes ")
+        #Inserindo o id da turma desejada
+        turmaIdAsk = int(input("Digite o ID da turma: "))
 
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
+        #identificando  aturma
+        turma = Sistema.turmas.get(turmaIdAsk)
+
+        #Checando se a turma existe
+        if turma is None:
+            print("Turma não encontrada!")
+            return
+        
+        #Checando se a turma possui alunos
+        if not turma.alunos:
+            print("Essa turma não possui alunos!")
+            return
+        
+        #iterando a turma
+        for alunos in turma.alunos:
+            #Identificando os alunos
+            aluno = Sistema.alunos[alunos]
+            #Checando se o aluno está ativo
+            if aluno.status == "ativo":
+                del Sistema.alunos[aluno.ID_ALUNO]
+                Sistema.concluintes[aluno.ID_ALUNO] = aluno
+                aluno.status = "Concluinte" 
+
+        Sistema.salvar()
+
 
     #Listar alunos de forma separada ou conjunta
     @classmethod
@@ -275,6 +303,29 @@ class Utils:
                 
                 for ID_ALUNO, aluno in turma.alunos:
                     print(f"Aluno {aluno.nome} ID: {aluno.ID_ALUNO}")
+
+            #Listar turmas
+            case 4:
+                turmas = Sistema.turmas.items()
+                if turmas is None:
+                    print("Turma não encontrada!")
+                    return
+                
+                for ID_TURMA, turma in Sistema.turmas.items():
+                    print(f"Turma {turma.nome} ID: {turma.ID_TURMA}")
+
+            #listar concluintes
+            case 5:
+                Sistema.carregar()
+                concluintes = Sistema.concluintes
+
+                if concluintes is None:
+                    print("Nenhum aluno concluinte")
+
+                for concluinte in concluintes.values():
+                    print(f"{concluinte.nome} ID: {concluinte.ID_ALUNO}")
+
+
 
     @staticmethod
     def PainelGestão():

@@ -8,7 +8,7 @@ class Professor:
     email: str = ""
     senha: str = ""
     nome_professor: str = ""
-    turmas: List[int] = field(default_factory=list)
+    turmas: List[int] = field(default_factory=list) #type: ignore
 
     _next_id: int = field(init=False, default=1, repr=False)
                  

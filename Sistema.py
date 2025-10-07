@@ -11,7 +11,7 @@ class Sistema:
     escolas = {}
     professores = {}
     gestores = {}
-    concluintes = set()
+    concluintes = {}
 
     # Salvar tudo em um único JSON
     @classmethod
@@ -22,7 +22,7 @@ class Sistema:
             "escolas": {id_e: escola.ToDict() for id_e, escola in cls.escolas.items()},
             "professores": {id_p: professor.ToDict() for id_p, professor in cls.professores.items()},
             "gestores": {id_g: gestor.ToDict() for id_g, gestor in cls.gestores.items()},
-            "concluintes": list(cls.concluintes)
+            "concluintes": {id_a: aluno.ToDict() for id_a, aluno in cls.concluintes.items()}    
         }
 
         with open(DBFile, "w", encoding = "utf-8") as file:
@@ -60,16 +60,25 @@ class Sistema:
                 nome=info["nome"],
                 id_escola=info.get("id_escola", None),
                 professores=info.get("professores") or [],
-                alunos=info.get("Alunos") or [] 
+                alunos=info.get("alunos") or [] 
     )
-    for id_t, info in dados.get("turmas", {}).items()
+        for id_t, info in dados.get("turmas", {}).items()
 } 
 
         cls.escolas = {
             int(id_e): Escolas(int(id_e), info["nome_escola"], info["cidade"], info["bairro"])
             for id_e, info in dados.get("escolas", {}).items()
         }
-        cls.concluintes = set(dados.get("concluintes", []))
+        cls.concluintes = {
+            int(id_a): Alunos(
+            int(id_a),
+            nome=info["nome"],
+            turma=info.get("turma"),
+            status=info.get("status"),
+            faltas=info.get("faltas")
+            )
+            for id_a, info in dados.get("concluintes", {}).items()
+        }
 
         cls.professores = {
             int(id_p): Professor(**prof) for id_p, prof in dados.get("professores", {}).items()
@@ -77,23 +86,6 @@ class Sistema:
         cls.gestores = {
             int(id_g): Gestor(**ges) for id_g, ges in dados.get("gestores", {}).items()
         }
-
-    #Atualizar status dos alunos
-    @classmethod
-    def AtualizarStatus(cls):
-        #Lê todos os IDS de alunos e atualiza seu status para "ativo" ou "inativo"
-        for id_aluno, aluno in Sistema.alunos.items():
-            #checa se o aluno está em uma turma mas não concluiu
-            if aluno.turma is not None and aluno.ID_ALUNO not in Sistema.concluintes:
-                #Atualiza o status para ativo
-                aluno.status = "ativo"
-            #Checa se o aluno ja concluiu
-            elif aluno.ID_ALUNO in Sistema.concluintes:
-                #Atualiza o status para inativo
-                aluno.status = "inativo"
-            #Se não estiver em uma turma, nem em ter concluido, status volta par None
-            else:
-                aluno.status = None
 
 
     @classmethod

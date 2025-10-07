@@ -1,57 +1,27 @@
 {
-    "alunos": {
-        "1": {
-            "id_aluno": 1,
-            "nome": "lucas",
-            "turma": 1,
-            "status": "",
-            "faltas": 0
-        },
-        "2": {
-            "id_aluno": 2,
-            "nome": "pedro",
-            "turma": null,
-            "status": "",
-            "faltas": 0
-        },
-        "3": {
-            "id_aluno": 3,
-            "nome": "arthur",
-            "turma": null,
-            "status": "",
-            "faltas": 0
-        }
-    },
+    "alunos": {},
     "turmas": {
         "1": {
             "id_turma": 1,
             "nome": "turma 7",
-            "professores": [
-                1
-            ],
+            "professores": [],
             "alunos": [
-                1
+                1,
+                2,
+                3
             ],
             "id_escola": "1"
         }
     },
     "escolas": {
         "1": {
-            "id_escola": 1,
+            "id_escola": "itambe",
             "nome_escola": 1,
             "cidade": 1,
-            "bairro": 1
+            "bairro": "pedrosa"
         }
     },
-    "professores": {
-        "1": {
-            "id_professor": 1,
-            "email": "arthurzito",
-            "senha": "arthur",
-            "nome_professor": "arthur",
-            "turmas": []
-        }
-    },
+    "professores": {},
     "gestores": {
         "1": {
             "id_gestor": 1,
@@ -63,5 +33,27 @@
             "turmas": []
         }
     },
-    "concluintes": []
+    "concluintes": {
+        "1": {
+            "id_aluno": 1,
+            "nome": "lucas",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        },
+        "2": {
+            "id_aluno": 2,
+            "nome": "pedro",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        },
+        "3": {
+            "id_aluno": 3,
+            "nome": "arthur",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        }
+    }
 }

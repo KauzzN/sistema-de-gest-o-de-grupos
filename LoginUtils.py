@@ -70,6 +70,7 @@ class Login:
         Sistema.salvar()
 
         print(f"Gestor {nome_gestor} cadastrado com sucesso!")
+        return True
 
     #Validar o usuario
     @staticmethod
@@ -81,7 +82,7 @@ class Login:
         for prof in Sistema.professores.values():
             #CHeca se o email e senha inseridos são válidos
             if prof.email == email and prof.senha ==senha:
-                print(f"Login bem-sucedido! Bem-vindo Professor {prof['nome_professor']}")
+                print(f"Login bem-sucedido! Bem-vindo Professor {prof.nome_professor}")
                 return prof
             
         #Le todos os gestores do banco de dados
