@@ -1,226 +1,45 @@
  
 #Dependencias
+from alunos import Alunos, Turmas
 from LoginUtils import Login
-from alunos import Alunos
-from alunos import Turmas
-from alunos import Sistema
+from Sistema import Sistema
+from Utils import Utils
+from gestor import Gestor
+from professores import Professor
+from escolas import Escolas
 
 
-#login System
-
-#Menu inicial de Login
-def mostrarMenuLogin():
-    print("""
-    Oque deseja fazer?
-        1. Cadastrar usuario
-        2. Efetuar login
-        3. Finalizar
-""")
-#Menu de gerencia dos alunos e turmas
-def mostrarMenuCad():
-    print("""
-    Menu cadastro:
-        1. Cadastrar aluno
-        2. Criar turma  
-        3. Adicionar/Transferir aluno
-        4. Listar alunos/turmas
-        5. Adicionar concluinte unico
-        6. Adicionar turma concluinte
-        7. Finalizar
-""")
-    
-def mostrarMenuList():
-    print("""
-    Oque deseja listar?
-        1. Todos os alunos
-        2. Listar por turma  
-        3. Listar grupos
-        4. Listar alunos sem grupos
-        5. Listar concluintes
-""")
-
-#Sistema de cadastro e gerencia
-def executarCadSystem():
-    #Carrega a dataBase
-    Sistema.carregar()
-
-    while True:
-        mostrarMenuCad()
-        
-        #checagem pra previnir erros
-        try:
-            menuCadAsk = int(input("> "))
-        except ValueError:
-            print("Digite um numero válido")
-            continue
-        match menuCadAsk:
-
-            #cadastrar Aluno
-            case 1:
-                #pegando as informações do aluno
-                nome = input("Qual o nome do aluno: ")
-                novoId = Sistema.gerarIdAluno()
-                
-                #Adicionao aluno ao banco de dados
-                novo_aluno = Alunos(novoId, nome)
-                Sistema.alunos[novoId] = novo_aluno
-                print(f"Aluno {nome} cadastrado, ID: {novoId}")
-
-                Sistema.salvar()
-
-            #Adicionar a uma turma
-            case 2:
-                #pegando informações da turma
-                nome = input("Qual o nome da turma: ")
-                novoId = Sistema.gerarIdTurma()
-
-                #Adicionando a turma ao banco de dados
-                novo_grupo = Turmas(novoId, nome)
-                Sistema.turmas[novoId] = novo_grupo
-                print(f"Turma {nome} cadastrada. ID: {novoId}")
-
-                Sistema.salvar()
-
-            #Adicionar/Transferir alunos entre grupos
-            case 3:
-                #Checagem para evitar erros
-                try:
-                    #Pegando as informações do aluno e do grupo desejado
-                    alunoIdAsk = int(input("Digite o ID do aluno: > "))
-                    turmaIdAsk = int(input("Digite o ID da turma: > "))
-                #Prevenindo de quebra de codigo por inserir algo diferente de numeros
-                except ValueError:
-                    print("Digite um ID válido")
-                    continue
-                
-                #Checa se o aluno e a turma existem no sistema
-                if alunoIdAsk in Sistema.alunos and turmaIdAsk in Sistema.turmas:
-                    #Identifica o aluno
-                    aluno = Sistema.alunos[alunoIdAsk]
-                    #Identifica a turma
-                    turma = Sistema.turmas[turmaIdAsk]
-                else:
-                    print("Aluno ou Turma não encontrados.")
-                    continue
-                
-                #Identificando a turma
-                turma = Sistema.turmas[turmaIdAsk]
-
-                #Checando se o aluno já possui uma turma
-                if aluno.turma is not None:
-                    #identificando a turma do aluno
-                    turmaAntiga = Sistema.turmas[aluno.turma]
-                    #identifica e remove o aluno da turma
-                    if aluno.ID_ALUNO in turmaAntiga.alunos:
-                        turmaAntiga.alunos.remove(aluno.ID_ALUNO)
-
-                #Adiciona o iD da turma ás informações do aluno
-                aluno.turma = turma.ID_TURMA
-                #Adiciona o aluno ás informações da turma
-                turma.alunos.append(aluno.ID_ALUNO)
-
-                #Atualiza status automatico
-                Sistema.AtualizarStatus()
-
-                print("")
-                print(f"Aluno {aluno.nome} foi adicionado/transferido para turma {turma.nome}!")
-
-                Sistema.salvar()
-
-            case 4:
-                Sistema.carregar()
-                Sistema.AtualizarStatus()
-                #menu das listas
-                mostrarMenuList()
-
-
-                #checagem para previnir erros
-                try:
-                    #Opção escolhida pelo usuario
-                    listarAsk = int(input("> "))
-                except ValueError:
-                    print("Digite um número válido")
-                    continue
-
-                Sistema.ListarAlunos(listarAsk)
-
-            #Adicionar concluinte unico
-            case 5:
-                #Pergunta o id do aluno a ser enviado para a Concluintes
-                alunoID = int(input("Digite o ID do aluno: "))
-
-                #checa se o aluno existe
-                if alunoID in Sistema.alunos:
-                    concluinte = Sistema.alunos[alunoID]
-                else:
-                    print("ID aluno não encontrado")
-                    continue
-                
-                #Adiciona o aluno ao sistema Concluintes 
-                Sistema.concluintes.add(concluinte.ID_ALUNO)
-                print(f"ID: {concluinte.ID_ALUNO} Aluno: {concluinte.nome} adicionado a CONCLUINTES")
-
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
-            #Adicionar turma concluinte
-            case 6:
-                #Perguntar o ID da turma
-                turmaID = int(input("Digite o ID da turma: "))
-
-                #Checando se a turma existe
-                if turmaID in Sistema.turmas:
-                    turmaX = Sistema.turmas[turmaID]
-                else:
-                    print("ID turma não encontrado")
-                    continue
-
-                for aluno in Sistema.alunos.values():
-                    if aluno.turma == turmaX.ID_TURMA:
-                        Sistema.concluintes.add(aluno.ID_ALUNO)
-                        print("ID: {aluno.ID_ALUNO} Nome: {aluno.nome} adicionado a concluintes ")
-
-                Sistema.AtualizarStatus()
-                Sistema.salvar()
-
-            case 7:
-                print("Finalizado!")
-                break
-        
-    mostrarMenuCad()
-
-executarCadSystem()
-    
- 
-mostrarMenuLogin()
 
 #login sistema
 while True:
+    Utils.mostrarMenuLogin()
+    menuAsk1 = int(input("> "))
 
-    try:
-        menuAsk = int(input("> "))
-    except ValueError:
-        print("Digite um numero válido")
-        continue
-
-    match menuAsk:
-        #Cadastrar Login
+    match menuAsk1:
+        #Cadastrar gestor
         case 1:
-            email = input("Digite um email:  > ")
-            senha = input("Digite uma senha: > ")
-            Login.cadastrarLogin(email, senha)
+            #Pegando as informações de cadastro
+            nome = Sistema.input_nao_vazio("Digite seu nome: ").strip()
+            email = Sistema.input_nao_vazio("Digite seu email: ").strip()
+            senha = Sistema.input_nao_vazio("Digite sua senha: ").strip()
+
+            #Salvando o cadastro no banco de dados
+            Login.cadastrarGestor(nome, email, senha)
 
         #Validar Login 
         case 2:
-            email = input("Digite seu email:  > ")
-            senha = input("Digite sua senha: > ")
-            Login.validarLogin(email, senha)
+            email = Sistema.input_nao_vazio("Digite seu email: ")
+            senha = Sistema.input_nao_vazio("Digite sua senha: ")
 
-            executarCadSystem()
+            usuario = Login.validarLogin(email, senha)
 
-        #Finalizar ação
+            if usuario is None:
+                print("Login inválido!")
+                continue
+            
+            if usuario.__class__.__name__=="Gestor":
+                Utils.PainelGestão()
+            
+            
         case 3:
-            print("finalizado!")
             break
-        
-    mostrarMenuLogin()
-

@@ -1,9 +1,59 @@
 {
-    "alunos": {
-        
-    },
+    "alunos": {},
     "turmas": {
-       
+        "1": {
+            "id_turma": 1,
+            "nome": "turma 7",
+            "professores": [],
+            "alunos": [
+                1,
+                2,
+                3
+            ],
+            "id_escola": "1"
+        }
     },
-    "concluintes": []
+    "escolas": {
+        "1": {
+            "id_escola": "itambe",
+            "nome_escola": 1,
+            "cidade": 1,
+            "bairro": "pedrosa"
+        }
+    },
+    "professores": {},
+    "gestores": {
+        "1": {
+            "id_gestor": 1,
+            "nome_gestor": "kaynnan",
+            "email": "a",
+            "senha": "a",
+            "professores": [],
+            "escolas": [],
+            "turmas": []
+        }
+    },
+    "concluintes": {
+        "1": {
+            "id_aluno": 1,
+            "nome": "lucas",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        },
+        "2": {
+            "id_aluno": 2,
+            "nome": "pedro",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        },
+        "3": {
+            "id_aluno": 3,
+            "nome": "arthur",
+            "turma": 1,
+            "status": "Concluinte",
+            "faltas": 0
+        }
+    }
 }
