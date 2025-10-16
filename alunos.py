@@ -10,9 +10,9 @@ import json
 @dataclass
 class Alunos:
     
-    ID_ALUNO: int = None #type: ignore
+    ID_ALUNO: int = None
     nome: str = ""
-    turma: int = None #type: ignore
+    turma: int = None
     status: str = ""
     faltas: int = 0
 
@@ -36,11 +36,11 @@ class Alunos:
 @dataclass
 class Turmas:
 
-    ID_TURMA: int = None #type: ignore
+    ID_TURMA: int = None
     nome: str = ""
     professores: List[int] = field(default_factory=list)
     alunos: List[int] = field(default_factory=list)
-    id_escola: int = None #type: ignore
+    id_escola: int = None
 
     _next_id: int = field(init = False, default = 1, repr = False)
 
