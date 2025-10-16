@@ -4,7 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login Page</title>
+
+  <!-- Fontes e ícones -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,8 +20,15 @@
       <h2>Login</h2>
       <p>Entre usando seu e-mail e senha</p>
       <input type="text" placeholder="E-mail" />
-      <input type="password" placeholder="Senha" />
-      
+
+      <!-- Campo de senha com ícone de olho -->
+      <div class="password-container">
+        <input type="password" id="senha" placeholder="Senha" />
+        <span class="toggle-password" onclick="togglePasswordVisibility()">
+          <span id="eye-icon" class="material-icons">visibility_off</span>
+        </span>
+      </div>
+
       <div class="checkbox-group">
         <label>
           <input type="checkbox" />
@@ -40,5 +52,21 @@
     </div>
 
   </div>
+
+  <!-- JavaScript -->
+  <script>
+    function togglePasswordVisibility() {
+      const senhaInput = document.getElementById('senha');
+      const eyeIcon = document.getElementById('eye-icon');
+
+      if (senhaInput.type === 'password') {
+        senhaInput.type = 'text';
+        eyeIcon.textContent = 'visibility';
+      } else {
+        senhaInput.type = 'password';
+        eyeIcon.textContent = 'visibility_off';
+      }
+    }
+  </script>
 </body>
 </html>
