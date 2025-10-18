@@ -24,6 +24,7 @@ body {
   z-index: 10;
 }
 
+/* FOGUETE VETOR*/
 .foguete-img {
   position: fixed;
   bottom: 0px;
