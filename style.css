@@ -7,7 +7,7 @@
 
 body {
   height: 100vh;
-  background-color: #181818;
+  background-color: #e7e7e7;
   position: relative;
   display: flex;
   justify-content: center;
@@ -17,9 +17,9 @@ body {
 /* LOGO no canto superior esquerdo */
 .logo-empresa {
   position: absolute;
-  top: 30px;
-  left: 35px;
-  width: 160px;
+  top: 40px;
+  left: 40px;
+  width: 230px;
   height: auto;
   z-index: 10;
 }
@@ -38,6 +38,7 @@ body {
   pointer-events: none;
 }
 
+/*QUADRADO DE LOGIN*/
 .container {
   width: 450px;
   background-color: #2a2a2a;
@@ -47,7 +48,7 @@ body {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  margin-left: -750px;
+  margin-left: -950px; /* MOVER QUADRADO DE LOGIN*/
   z-index: 2;
 }
 
