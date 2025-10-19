@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro</title>
+
+  <!-- Fontes e ícones -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Logo no canto superior esquerdo -->
+  <img src="KYBREN PDR PRETO.png" alt="Logo da Empresa" class="logo-empresa" />
+
+  <!-- Imagem da tela de registro -->
+  <img src="IMAGEM DE REGISTRO.png" alt="Registro" class="imagem-registro" />
+
+  <div class="container registro-container">
+    <div class="signin registro-form">
+      <h2>REGISTRAR</h2>
+
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" placeholder="Nome completo" />
+
+      <label for="email">E-mail:</label>
+      <input type="text" id="email" placeholder="E-mail" />
+
+      <label for="senha">Senha:</label>
+      <input type="password" id="senha" placeholder="Crie uma senha forte" />
+
+      <label for="confirmar-senha">Confirmar Senha:</label>
+      <input type="password" id="confirmar-senha" placeholder="Confirme sua Senha" />
+
+      <p>Confirme seu cargo:</p>
+      <div class="checkbox-group">
+        <label>
+          <input type="radio" name="cargo" />
+          Professor
+        </label>
+        <label>
+          <input type="radio" name="cargo" />
+          Gestor
+        </label>
+      </div>
+
+      <button class="signin-btn">Confirmar Registro</button>
+    </div>
+  </div>
+</body>
+</html>
