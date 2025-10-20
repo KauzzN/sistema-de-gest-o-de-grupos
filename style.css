@@ -7,7 +7,7 @@
 
 body {
   height: 100vh;
-  background-color: #181818;
+  background-color: #e7e7e7;
   position: relative;
   display: flex;
   justify-content: center;
@@ -17,13 +17,14 @@ body {
 /* LOGO no canto superior esquerdo */
 .logo-empresa {
   position: absolute;
-  top: 30px;
-  left: 35px;
-  width: 160px;
+  top: 40px;
+  left: 40px;
+  width: 230px;
   height: auto;
   z-index: 10;
 }
 
+/* FOGUETE VETOR*/
 .foguete-img {
   position: fixed;
   bottom: 0px;
@@ -37,6 +38,7 @@ body {
   pointer-events: none;
 }
 
+/*QUADRADO DE LOGIN*/
 .container {
   width: 450px;
   background-color: #2a2a2a;
@@ -46,7 +48,7 @@ body {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  margin-left: -750px;
+  margin-left: -950px; /* MOVER QUADRADO DE LOGIN*/
   z-index: 2;
 }
 
@@ -105,7 +107,8 @@ input::placeholder {
   line-height: 28px;
 }
 
-.checkbox-group input[type="checkbox"] {
+.checkbox-group input[type="checkbox"],
+.checkbox-group input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
   background-color: #1a1a1a;
@@ -120,12 +123,14 @@ input::placeholder {
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-.checkbox-group input[type="checkbox"]:checked {
+.checkbox-group input[type="checkbox"]:checked,
+.checkbox-group input[type="radio"]:checked {
   background-color: #fff;
   border-color: #fff;
 }
 
-.checkbox-group input[type="checkbox"]:checked::after {
+.checkbox-group input[type="checkbox"]:checked::after,
+.checkbox-group input[type="radio"]:checked::after {
   content: "";
   position: absolute;
   top: 0.8px;
@@ -233,4 +238,87 @@ input::placeholder {
 
 a, a:visited, a:hover, a:active {
   color: #f5f5f5 !important;
+}
+
+/* IMAGEM DA TELA DE REGISTRO */
+.imagem-registro {
+  position: fixed;
+  right: 150px;
+  top: 48%;
+  transform: translateY(-50%);
+  max-width: 780px;  /* ajuste o tamanho aqui conforme preferir */
+  height: auto;
+  z-index: 0;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Estilo exclusivo para container de registro */
+.container.registro-container {
+  width: 550px;         /* aumenta largura */
+  padding: 40px 30px;   /* aumenta padding */
+  margin-left: -900px;  /* ajuste para posicionar melhor, se quiser */
+}
+
+.container.registro-container {
+  width: 550px;
+  padding: 40px 30px;
+  margin-left: -900px;
+  margin-top: 55px; /* adicione essa linha para abaixar o quadrado */
+}
+
+
+/* Estilo exclusivo para o formulário de registro */
+.signin.registro-form {
+  gap: 18px;            /* aumenta espaçamento entre os campos */
+}
+
+/* Labels estilo igual inputs */
+.signin.registro-form label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: block;
+}
+
+/* Ajusta o texto e os checkboxes dos cargos */
+.registro-form p {
+  margin-bottom: -15px; /* diminui o espaço abaixo do texto */
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Deixa os checkboxes e labels mais próximos do texto acima e entre si */
+.registro-form .checkbox-group {
+  display: flex;
+  gap: 15px;          /* espaço menor entre as opções */
+  margin-top: 0;
+  margin-bottom: 30px; /* mantém um espaço depois do grupo */
+  align-items: center;
+}
+
+/* Ajusta o label para o checkbox (diminui o padding e gap para ficar mais compacto) */
+.registro-form .checkbox-group label {
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;             /* reduz um pouco o espaço entre caixa e texto */
+  position: relative;
+  padding-left: 28px;   /* deixa a caixa no lugar certo */
+  line-height: 28px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.logo-empresa {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 230px; /* tamanho igual do container de registro */
+  height: auto;
+  z-index: 10;
 }
